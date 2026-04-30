@@ -16,19 +16,27 @@ export class Search extends Component<object, SearchState> {
   }
 
   componentDidMount() {
-  const savedTerm = localStorage.getItem(STORAGE_KEY);
+    const savedTerm = localStorage.getItem(STORAGE_KEY);
 
-  if (savedTerm) {
-    this.setState({
-      searchTerm: savedTerm,
-    });
+    if (savedTerm) {
+      this.setState({
+        searchTerm: savedTerm,
+      });
+    }
   }
-}
 
   handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({
       searchTerm: event.target.value,
     });
+  };
+
+  handleSearch = () => {
+    const trimmed = this.state.searchTerm.trim();
+
+    if (!trimmed) return;
+
+    localStorage.setItem(STORAGE_KEY, trimmed);
   };
 
   render() {
@@ -41,7 +49,9 @@ export class Search extends Component<object, SearchState> {
           onChange={this.handleChange}
         />
 
-        <button type="button">Search</button>
+        <button type="button" onClick={this.handleSearch}>
+          Search
+        </button>
       </div>
     );
   }
