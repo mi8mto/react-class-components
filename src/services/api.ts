@@ -1,12 +1,15 @@
 import type { ApiResponse } from '../types/api';
 
-const BASE_URL = 'https://swapi.dev/api/people/';
+const BASE_URL = 'https://pokeapi.co/api/v2/pokemon';
 
 export const fetchPeople = async (
   search: string,
   page: number = 1
 ): Promise<ApiResponse> => {
-  const url = `${BASE_URL}?search=${search}&page=${page}`;
+  const limit = 10;
+  const offset = (page - 1) * limit;
+
+  const url = `${BASE_URL}?limit=${limit}&offset=${offset}`;
 
   const response = await fetch(url);
 
