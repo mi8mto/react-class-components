@@ -1,5 +1,7 @@
 import { Component } from 'react';
 
+const STORAGE_KEY = 'searchTerm';
+
 interface SearchState {
   searchTerm: string;
 }
@@ -12,6 +14,16 @@ export class Search extends Component<object, SearchState> {
       searchTerm: '',
     };
   }
+
+  componentDidMount() {
+  const savedTerm = localStorage.getItem(STORAGE_KEY);
+
+  if (savedTerm) {
+    this.setState({
+      searchTerm: savedTerm,
+    });
+  }
+}
 
   handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({
