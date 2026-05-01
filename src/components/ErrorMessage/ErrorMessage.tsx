@@ -8,8 +8,8 @@ interface ErrorMessageProps {
 export class ErrorMessage extends Component<ErrorMessageProps> {
   render() {
     return (
-      <div className="error-container">
-        <p className="error-text">{this.props.message}</p>
+      <div className="error-message">
+        <p>{this.props.message}</p>
       </div>
     );
   }

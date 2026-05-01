@@ -28,11 +28,7 @@ export class ErrorButton extends Component<object, ErrorButtonState> {
       <button
         type="button"
         onClick={this.handleClick}
-        style={{
-          marginTop: '20px',
-          padding: '10px',
-          cursor: 'pointer',
-        }}
+        className="error-button"
       >
         Trigger Error
       </button>

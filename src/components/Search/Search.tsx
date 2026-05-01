@@ -53,9 +53,10 @@ export class Search extends Component<SearchProps, SearchState> {
           placeholder="Search characters..."
           value={this.state.searchTerm}
           onChange={this.handleChange}
+          className="search-input"
         />
 
-        <button type="button" onClick={this.handleSearch}>
+        <button type="button" onClick={this.handleSearch} className="search-button">
           Search
         </button>
       </div>
