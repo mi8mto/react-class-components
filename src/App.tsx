@@ -20,7 +20,7 @@ class App extends Component<object, AppState> {
 
     this.state = {
       people: [],
-      loading: false,
+      loading: true,
       error: null,
     };
   }
