@@ -25,11 +25,15 @@ class App extends Component<object, AppState> {
     };
   }
 
-  componentDidMount() {
-    setTimeout(() => {
-      this.loadPeople('');
-    }, 0);
+componentDidMount() {
+  const savedTerm = localStorage.getItem('searchTerm');
+
+  if (savedTerm) {
+    this.loadPeople(savedTerm);
+  } else {
+    this.loadPeople('');
   }
+}
 
   loadPeople = async (search: string) => {
     try {
@@ -56,26 +60,36 @@ class App extends Component<object, AppState> {
     }
   };
 
-  render() {
-    const { people, loading, error } = this.state;
+render() {
+  const { people, loading, error } = this.state;
 
-    return (
-      <div className="app-container">
-        <Search onSearch={this.loadPeople} />
-        <div className="results-section">
-          {loading && <Spinner />}
-          {error && <ErrorMessage message={error} />}
+  return (
+    <div className="app-container">
 
-          {!loading && !error && people.length > 0 && (
-            <CardList people={people} />
-          )}
 
-          {!loading && !error && people.length === 0 && <p>No results found</p>}
-        </div>
-        <ErrorButton />
+      <Search onSearch={this.loadPeople} />
+      <div className="results-section">
+
+        {loading && <Spinner />}
+
+        {error && (
+          <ErrorMessage message={error} />
+        )}
+
+        {!loading && !error && people.length > 0 && (
+          <CardList people={people} />
+        )}
+
+        {!loading && !error && people.length === 0 && (
+          <p>No results found</p>
+        )}
+
       </div>
-    );
-  }
+      <ErrorButton />
+
+    </div>
+  );
+}
 }
 
 export default App;
