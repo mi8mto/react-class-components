@@ -6,17 +6,17 @@ interface CardListProps {
 }
 
 export class CardList extends Component<CardListProps> {
-render() {
-  const { people } = this.props;
+  render() {
+    const { people } = this.props;
 
-  return (
-    <>
-      {people.map((person) => (
-        <div key={person.name} className="card">
-          <h3>{person.name}</h3>
-        </div>
-      ))}
-    </>
-  );
-}
+    return (
+      <>
+        {people.map((person) => (
+          <div key={person.name} className="card">
+            <h3>{person.name}</h3>
+          </div>
+        ))}
+      </>
+    );
+  }
 }

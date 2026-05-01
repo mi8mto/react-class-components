@@ -1,10 +1,10 @@
-
 import { Component } from 'react';
 import { Search } from './components/Search/Search';
 import { CardList } from './components/CardList/CardList';
 import { fetchPeople } from './services/api';
 import type { Person } from './types/api';
 import { Spinner } from './components/Spinner/Spinner';
+import { ErrorMessage } from './components/ErrorMessage/ErrorMessage';
 import './App.css';
 
 interface AppState {
@@ -24,61 +24,56 @@ class App extends Component<object, AppState> {
     };
   }
 
-componentDidMount() {
-  setTimeout(() => {
-    this.loadPeople('');
-  }, 0);
-}
-
-loadPeople = async (search: string) => {
-  try {
-    this.setState({
-      loading: true,
-      error: null,
-    });
-
-    await new Promise((resolve) =>
-      setTimeout(resolve, 300)
-    );
-
-    const data = await fetchPeople(search);
-
-    this.setState({
-      people: data.results,
-      loading: false,
-    });
-  } catch (error) {
-    console.error(error);
-
-    this.setState({
-      error: 'Failed to load data',
-      loading: false,
-    });
+  componentDidMount() {
+    setTimeout(() => {
+      this.loadPeople('');
+    }, 0);
   }
-};
 
-render() {
-  const { people, loading, error } = this.state;
+  loadPeople = async (search: string) => {
+    try {
+      this.setState({
+        loading: true,
+        error: null,
+      });
 
-  return (
-    <div className="app-container">
-      <Search onSearch={this.loadPeople} />
-      <div className="results-section">
-        {loading && <Spinner />}
-        {error && <p className="error-message">{error}</p>}
+      await new Promise((resolve) => setTimeout(resolve, 300));
 
-        {!loading && !error && people.length > 0 && (
-          <CardList people={people} />
-        )}
+      const data = await fetchPeople(search);
 
-        {!loading && !error && people.length === 0 && (
-          <p>No results found</p>
-        )}
+      this.setState({
+        people: data.results,
+        loading: false,
+      });
+    } catch (error) {
+      console.error(error);
+
+      this.setState({
+        error: 'Failed to load data',
+        loading: false,
+      });
+    }
+  };
+
+  render() {
+    const { people, loading, error } = this.state;
+
+    return (
+      <div className="app-container">
+        <Search onSearch={this.loadPeople} />
+        <div className="results-section">
+          {loading && <Spinner />}
+         {error && <ErrorMessage message={error} />}
+
+          {!loading && !error && people.length > 0 && (
+            <CardList people={people} />
+          )}
+
+          {!loading && !error && people.length === 0 && <p>No results found</p>}
+        </div>
       </div>
-    </div>
-  );
-}
-
+    );
+  }
 }
 
 export default App;
