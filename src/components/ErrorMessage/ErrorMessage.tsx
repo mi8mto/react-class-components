@@ -9,9 +9,7 @@ export class ErrorMessage extends Component<ErrorMessageProps> {
   render() {
     return (
       <div className="error-container">
-        <p className="error-text">
-         {this.props.message}
-        </p>
+        <p className="error-text">{this.props.message}</p>
       </div>
     );
   }

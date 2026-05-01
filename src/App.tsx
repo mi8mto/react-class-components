@@ -5,6 +5,7 @@ import { fetchPeople } from './services/api';
 import type { Person } from './types/api';
 import { Spinner } from './components/Spinner/Spinner';
 import { ErrorMessage } from './components/ErrorMessage/ErrorMessage';
+import { ErrorButton } from './components/ErrorButton/ErrorButton';
 import './App.css';
 
 interface AppState {
@@ -63,7 +64,7 @@ class App extends Component<object, AppState> {
         <Search onSearch={this.loadPeople} />
         <div className="results-section">
           {loading && <Spinner />}
-         {error && <ErrorMessage message={error} />}
+          {error && <ErrorMessage message={error} />}
 
           {!loading && !error && people.length > 0 && (
             <CardList people={people} />
@@ -71,6 +72,7 @@ class App extends Component<object, AppState> {
 
           {!loading && !error && people.length === 0 && <p>No results found</p>}
         </div>
+        <ErrorButton />
       </div>
     );
   }
