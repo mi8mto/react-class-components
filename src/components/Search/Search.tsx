@@ -19,15 +19,15 @@ export class Search extends Component<SearchProps, SearchState> {
     };
   }
 
-componentDidMount() {
-  const savedTerm = localStorage.getItem(STORAGE_KEY);
+  componentDidMount() {
+    const savedTerm = localStorage.getItem(STORAGE_KEY);
 
-  if (savedTerm) {
-    this.setState({
-      searchTerm: savedTerm,
-    });
+    if (savedTerm) {
+      this.setState({
+        searchTerm: savedTerm,
+      });
+    }
   }
-}
 
   handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({
