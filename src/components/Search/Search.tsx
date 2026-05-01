@@ -1,4 +1,3 @@
-// Search.tsx
 import { Component } from 'react';
 
 const STORAGE_KEY = 'searchTerm';
@@ -36,15 +35,15 @@ export class Search extends Component<SearchProps, SearchState> {
     });
   };
 
-handleSearch = () => {
-  const trimmed = this.state.searchTerm.trim();
+  handleSearch = () => {
+    const trimmed = this.state.searchTerm.trim();
 
-  if (!trimmed) return;
+    if (!trimmed) return;
 
-  localStorage.setItem(STORAGE_KEY, trimmed);
+    localStorage.setItem(STORAGE_KEY, trimmed);
 
-  this.props.onSearch(trimmed);
-};
+    this.props.onSearch(trimmed);
+  };
 
   render() {
     return (

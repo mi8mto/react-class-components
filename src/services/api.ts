@@ -19,7 +19,7 @@ export const fetchPeople = async (
 
   const data: ApiResponse = await response.json();
 
-  // 🔥 фильтрация по имени
+
   if (search.trim()) {
     const filtered = data.results.filter((person) =>
       person.name.toLowerCase().includes(search.toLowerCase())
