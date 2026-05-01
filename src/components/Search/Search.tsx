@@ -56,7 +56,11 @@ export class Search extends Component<SearchProps, SearchState> {
           className="search-input"
         />
 
-        <button type="button" onClick={this.handleSearch} className="search-button">
+        <button
+          type="button"
+          onClick={this.handleSearch}
+          className="search-button"
+        >
           Search
         </button>
       </div>

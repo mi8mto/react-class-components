@@ -25,11 +25,7 @@ export class ErrorButton extends Component<object, ErrorButtonState> {
     }
 
     return (
-      <button
-        type="button"
-        onClick={this.handleClick}
-        className="error-button"
-      >
+      <button type="button" onClick={this.handleClick} className="error-button">
         Trigger Error
       </button>
     );
