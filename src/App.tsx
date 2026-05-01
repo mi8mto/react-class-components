@@ -1,3 +1,4 @@
+// App.tsx
 import { Component } from 'react';
 import { Search } from './components/Search/Search';
 import { CardList } from './components/CardList/CardList';
@@ -54,7 +55,7 @@ class App extends Component<object, AppState> {
 
     return (
       <div className="app-container">
-        <Search />
+       <Search onSearch={this.loadPeople} />
 
         {loading && <p>Loading...</p>}
 

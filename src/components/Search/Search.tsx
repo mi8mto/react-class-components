@@ -1,3 +1,4 @@
+// Search.tsx
 import { Component } from 'react';
 
 const STORAGE_KEY = 'searchTerm';
@@ -6,8 +7,12 @@ interface SearchState {
   searchTerm: string;
 }
 
-export class Search extends Component<object, SearchState> {
-  constructor(props: object) {
+interface SearchProps {
+  onSearch: (search: string) => void;
+}
+
+export class Search extends Component<SearchProps, SearchState> {
+  constructor(props: SearchProps) {
     super(props);
 
     this.state = {
@@ -31,13 +36,15 @@ export class Search extends Component<object, SearchState> {
     });
   };
 
-  handleSearch = () => {
-    const trimmed = this.state.searchTerm.trim();
+handleSearch = () => {
+  const trimmed = this.state.searchTerm.trim();
 
-    if (!trimmed) return;
+  if (!trimmed) return;
 
-    localStorage.setItem(STORAGE_KEY, trimmed);
-  };
+  localStorage.setItem(STORAGE_KEY, trimmed);
+
+  this.props.onSearch(trimmed);
+};
 
   render() {
     return (
