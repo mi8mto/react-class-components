@@ -4,10 +4,10 @@ import type { Person } from '../../types/api';
 
 describe('CardList component', () => {
   test('renders list of people', () => {
-  const people: Person[] = [
-  { name: 'Pikachu', gender: 'electric', url: 'test-url-1' },
-  { name: 'Bulbasaur', gender: 'grass', url: 'test-url-2' },
-];
+    const people: Person[] = [
+      { name: 'Pikachu', gender: 'electric', url: 'test-url-1' },
+      { name: 'Bulbasaur', gender: 'grass', url: 'test-url-2' },
+    ];
 
     render(<CardList people={people} />);
 
@@ -16,7 +16,9 @@ describe('CardList component', () => {
   });
 
   test('renders description (gender)', () => {
-    const people: Person[] = [ { name: 'Charmander', gender: 'fire', url: 'test-url' },];
+    const people: Person[] = [
+      { name: 'Charmander', gender: 'fire', url: 'test-url' },
+    ];
 
     render(<CardList people={people} />);
 
@@ -24,13 +26,11 @@ describe('CardList component', () => {
   });
 
   test('renders fallback description when missing', () => {
-    const people: Person[] = [ { name: 'Squirtle', url: 'test-url' }];
+    const people: Person[] = [{ name: 'Squirtle', url: 'test-url' }];
 
     render(<CardList people={people} />);
 
-    expect(
-      screen.getByText('No description available')
-    ).toBeInTheDocument();
+    expect(screen.getByText('No description available')).toBeInTheDocument();
   });
 
   test('renders nothing when list is empty', () => {
