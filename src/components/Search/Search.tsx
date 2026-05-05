@@ -11,6 +11,8 @@ interface SearchProps {
 }
 
 export class Search extends Component<SearchProps, SearchState> {
+  private lastSearch = '';
+
   constructor(props: SearchProps) {
     super(props);
 
@@ -26,6 +28,8 @@ export class Search extends Component<SearchProps, SearchState> {
       this.setState({
         searchTerm: savedTerm,
       });
+
+      this.lastSearch = savedTerm;
     }
   }
 
@@ -38,7 +42,10 @@ export class Search extends Component<SearchProps, SearchState> {
   handleSearch = () => {
     const trimmed = this.state.searchTerm.trim();
 
-    if (!trimmed) return;
+    // ❗ защита от пустого значения и повторного запроса
+    if (!trimmed || trimmed === this.lastSearch) return;
+
+    this.lastSearch = trimmed;
 
     localStorage.setItem(STORAGE_KEY, trimmed);
 

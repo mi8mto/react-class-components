@@ -14,6 +14,7 @@ export class CardList extends Component<CardListProps> {
         {people.map((person) => (
           <div key={person.name} className="card">
             <h3>{person.name}</h3>
+            <p>{person.gender || 'No description available'}</p>
           </div>
         ))}
       </>
