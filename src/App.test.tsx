@@ -47,16 +47,12 @@ describe('App component', () => {
   });
 
   test('shows error message when API fails', async () => {
-    vi.mocked(api.fetchPokemon).mockRejectedValue(
-      new Error('API error')
-    );
+    vi.mocked(api.fetchPokemon).mockRejectedValue(new Error('API error'));
 
     render(<App />);
 
     await waitFor(() => {
-      expect(
-        screen.getByText(/failed to load data/i)
-      ).toBeInTheDocument();
+      expect(screen.getByText(/failed to load data/i)).toBeInTheDocument();
     });
   });
 
@@ -69,9 +65,7 @@ describe('App component', () => {
     render(<App />);
 
     await waitFor(() => {
-      expect(
-        screen.getByText(/no results found/i)
-      ).toBeInTheDocument();
+      expect(screen.getByText(/no results found/i)).toBeInTheDocument();
     });
   });
 });
