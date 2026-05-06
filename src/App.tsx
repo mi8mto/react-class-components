@@ -75,7 +75,9 @@ class App extends Component<object, AppState> {
             <CardList pokemonList={pokemonList} />
           )}
 
-          {!loading && !error && pokemonList.length === 0 && <p>No results found</p>}
+          {!loading && !error && pokemonList.length === 0 && (
+            <p>No results found</p>
+          )}
         </div>
         <ErrorButton />
       </div>
