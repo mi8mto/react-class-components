@@ -107,6 +107,12 @@
   font-weight: 600;
 }
 
+.card-description {
+  margin: 8px 0 0;
+  font-size: 0.875rem;
+  color: #64748b;
+}
+
 .spinner-container {
   grid-column: 1 / -1;
   display: flex;
