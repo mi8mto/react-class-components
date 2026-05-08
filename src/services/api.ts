@@ -2,7 +2,7 @@ import type { ApiResponse } from '../types/api';
 
 const BASE_URL = 'https://pokeapi.co/api/v2/pokemon';
 
-export const fetchPeople = async (
+export const fetchPokemon = async (
   search: string,
   page: number = 1
 ): Promise<ApiResponse> => {
@@ -20,8 +20,8 @@ export const fetchPeople = async (
   const data: ApiResponse = await response.json();
 
   if (search.trim()) {
-    const filtered = data.results.filter((person) =>
-      person.name.toLowerCase().includes(search.toLowerCase())
+    const filtered = data.results.filter((pokemon) =>
+      pokemon.name.toLowerCase().includes(search.toLowerCase())
     );
 
     return {

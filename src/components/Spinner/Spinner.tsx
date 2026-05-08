@@ -1,12 +1,9 @@
-import { Component } from 'react';
 import './Spinner.css';
 
-export class Spinner extends Component {
-  render() {
-    return (
-      <div className="spinner-container">
-        <div className="spinner"></div>
-      </div>
-    );
-  }
-}
+export const Spinner = () => {
+  return (
+    <div className="spinner-container" role="status" aria-label="loading">
+      <div className="spinner" />
+    </div>
+  );
+};

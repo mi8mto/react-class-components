@@ -1,9 +1,9 @@
-export interface Person {
+export interface Pokemon {
   name: string;
   url: string;
 }
 
 export interface ApiResponse {
   count: number;
-  results: Person[];
+  results: Pokemon[];
 }

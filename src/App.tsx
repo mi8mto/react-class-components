@@ -1,15 +1,15 @@
 import { Component } from 'react';
 import { Search } from './components/Search/Search';
 import { CardList } from './components/CardList/CardList';
-import { fetchPeople } from './services/api';
-import type { Person } from './types/api';
+import { fetchPokemon } from './services/api';
+import type { Pokemon } from './types/api';
 import { Spinner } from './components/Spinner/Spinner';
 import { ErrorMessage } from './components/ErrorMessage/ErrorMessage';
 import { ErrorButton } from './components/ErrorButton/ErrorButton';
 import './App.css';
 
 interface AppState {
-  people: Person[];
+  pokemonList: Pokemon[];
   loading: boolean;
   error: string | null;
 }
@@ -19,7 +19,7 @@ class App extends Component<object, AppState> {
     super(props);
 
     this.state = {
-      people: [],
+      pokemonList: [],
       loading: true,
       error: null,
     };
@@ -29,13 +29,13 @@ class App extends Component<object, AppState> {
     const savedTerm = localStorage.getItem('searchTerm');
 
     if (savedTerm) {
-      this.loadPeople(savedTerm);
+      this.loadPokemon(savedTerm);
     } else {
-      this.loadPeople('');
+      this.loadPokemon('');
     }
   }
 
-  loadPeople = async (search: string) => {
+  loadPokemon = async (search: string) => {
     try {
       this.setState({
         loading: true,
@@ -44,10 +44,10 @@ class App extends Component<object, AppState> {
 
       await new Promise((resolve) => setTimeout(resolve, 300));
 
-      const data = await fetchPeople(search);
+      const data = await fetchPokemon(search);
 
       this.setState({
-        people: data.results,
+        pokemonList: data.results,
         loading: false,
       });
     } catch (error) {
@@ -61,21 +61,23 @@ class App extends Component<object, AppState> {
   };
 
   render() {
-    const { people, loading, error } = this.state;
+    const { pokemonList, loading, error } = this.state;
 
     return (
       <div className="app-container">
-        <Search onSearch={this.loadPeople} />
+        <Search onSearch={this.loadPokemon} />
         <div className="results-section">
           {loading && <Spinner />}
 
           {error && <ErrorMessage message={error} />}
 
-          {!loading && !error && people.length > 0 && (
-            <CardList people={people} />
+          {!loading && !error && pokemonList.length > 0 && (
+            <CardList pokemonList={pokemonList} />
           )}
 
-          {!loading && !error && people.length === 0 && <p>No results found</p>}
+          {!loading && !error && pokemonList.length === 0 && (
+            <p>No results found</p>
+          )}
         </div>
         <ErrorButton />
       </div>
