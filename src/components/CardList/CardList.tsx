@@ -15,7 +15,9 @@ export const CardList = ({ pokemonList }: CardListProps) => {
       {pokemonList.map((pokemon) => (
         <div key={pokemon.name} className="card">
           <h3>{pokemon.name}</h3>
-          <p className="card-description">Pokemon #{getPokemonId(pokemon.url)}</p>
+          <p className="card-description">
+            Pokemon #{getPokemonId(pokemon.url)}
+          </p>
         </div>
       ))}
     </>
