@@ -16,7 +16,10 @@ export const MainPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const pageParam = searchParams.get('page');
+  const detailsParam = searchParams.get('details');
   const currentPage = pageParam ? Number(pageParam) : 1;
+
+  void detailsParam;
 
   const [pokemonList, setPokemonList] = useState<Pokemon[]>([]);
   const [loading, setLoading] = useState(true);
@@ -63,12 +66,25 @@ export const MainPage = () => {
   }, []);
 
   const handlePageChange = (page: number) => {
-    setSearchParams({ page: String(page) });
+    const nextParams = new URLSearchParams(searchParams);
+
+    nextParams.set('page', String(page));
+
+    setSearchParams(nextParams);
   };
 
   const handleSearch = (search: string) => {
     setSearchParams({ page: '1' });
     void loadPokemon(search);
+  };
+
+  const handlePokemonSelect = (pokemonId: string) => {
+    const nextParams = new URLSearchParams(searchParams);
+
+    nextParams.set('page', String(currentPage));
+    nextParams.set('details', pokemonId);
+
+    setSearchParams(nextParams);
   };
 
   useEffect(() => {
@@ -94,7 +110,10 @@ export const MainPage = () => {
 
         {!loading && !error && pokemonList.length > 0 && (
           <>
-            <CardList pokemonList={visiblePokemonList} />
+            <CardList
+              pokemonList={visiblePokemonList}
+              onPokemonSelect={handlePokemonSelect}
+            />
 
             <Pagination
               currentPage={currentPage}
