@@ -33,17 +33,17 @@ export const MainPage = () => {
     }
   }, []);
 
-useEffect(() => {
-  const savedTerm = localStorage.getItem(SEARCH_STORAGE_KEY) ?? '';
+  useEffect(() => {
+    const savedTerm = localStorage.getItem(SEARCH_STORAGE_KEY) ?? '';
 
-  const timeoutId = window.setTimeout(() => {
-    void loadPokemon(savedTerm);
-  }, 0);
+    const timeoutId = window.setTimeout(() => {
+      void loadPokemon(savedTerm);
+    }, 0);
 
-  return () => {
-    window.clearTimeout(timeoutId);
-  };
-}, [loadPokemon]);
+    return () => {
+      window.clearTimeout(timeoutId);
+    };
+  }, [loadPokemon]);
 
   return (
     <div className="app-container">
