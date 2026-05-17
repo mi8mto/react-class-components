@@ -114,6 +114,12 @@
   transition: all 0.3s ease;
   display: flex;
   flex-direction: column;
+
+  width: 100%;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
 }
 
 .card:hover {
@@ -121,6 +127,11 @@
   background-color: rgba(255, 255, 255, 0.05);
   box-shadow: var(--shadow-hover);
   border-color: rgba(255, 255, 255, 0.2);
+}
+
+.card:focus-visible {
+  outline: 3px solid var(--accent-color);
+  outline-offset: 3px;
 }
 
 .card h3 {
