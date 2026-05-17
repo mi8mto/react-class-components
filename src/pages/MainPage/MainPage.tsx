@@ -66,6 +66,11 @@ export const MainPage = () => {
     setSearchParams({ page: String(page) });
   };
 
+  const handleSearch = (search: string) => {
+    setSearchParams({ page: '1' });
+    void loadPokemon(search);
+  };
+
   useEffect(() => {
     const savedTerm = localStorage.getItem(SEARCH_STORAGE_KEY) ?? '';
 
@@ -80,7 +85,7 @@ export const MainPage = () => {
 
   return (
     <div className="app-container">
-      <Search onSearch={loadPokemon} />
+      <Search onSearch={handleSearch} />
 
       <div className="results-section">
         {loading && <Spinner />}
