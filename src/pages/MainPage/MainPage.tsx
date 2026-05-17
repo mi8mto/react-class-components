@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { Search } from '../../components/Search/Search';
 import { CardList } from '../../components/CardList/CardList';
 import { fetchPokemon } from '../../services/api';
@@ -10,9 +11,29 @@ import { ErrorButton } from '../../components/ErrorButton/ErrorButton';
 const SEARCH_STORAGE_KEY = 'searchTerm';
 
 export const MainPage = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const pageParam = searchParams.get('page');
+  const currentPage = pageParam ? Number(pageParam) : 1;
+  void currentPage;
+
   const [pokemonList, setPokemonList] = useState<Pokemon[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+ useEffect(() => {
+  if (!pageParam) {
+    const timeoutId = window.setTimeout(() => {
+      setSearchParams({ page: '1' }, { replace: true });
+    }, 0);
+
+    return () => {
+      window.clearTimeout(timeoutId);
+    };
+  }
+
+  return undefined;
+}, [pageParam, setSearchParams]);
 
   const loadPokemon = useCallback(async (search: string) => {
     try {
