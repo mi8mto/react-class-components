@@ -20,8 +20,6 @@ export const MainPage = () => {
   const detailsParam = searchParams.get('details');
   const currentPage = pageParam ? Number(pageParam) : 1;
 
-  void detailsParam;
-
   const [pokemonList, setPokemonList] = useState<Pokemon[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -70,12 +68,13 @@ export const MainPage = () => {
     const nextParams = new URLSearchParams(searchParams);
 
     nextParams.set('page', String(page));
+    nextParams.delete('details');
 
-    setSearchParams(nextParams);
+    navigate(`/?${nextParams.toString()}`);
   };
 
   const handleSearch = (search: string) => {
-    setSearchParams({ page: '1' });
+    navigate('/?page=1');
     void loadPokemon(search);
   };
 
@@ -86,6 +85,18 @@ export const MainPage = () => {
     nextParams.set('details', pokemonId);
 
     navigate(`/details?${nextParams.toString()}`);
+  };
+
+  const handleCloseDetails = () => {
+    if (!detailsParam) {
+      return;
+    }
+
+    const nextParams = new URLSearchParams(searchParams);
+
+    nextParams.delete('details');
+
+    navigate(`/?${nextParams.toString()}`);
   };
 
   useEffect(() => {
@@ -105,7 +116,7 @@ export const MainPage = () => {
       <Search onSearch={handleSearch} />
 
       <div className="content-layout">
-        <main className="main-panel">
+        <main className="main-panel" onClick={handleCloseDetails}>
           <div className="results-section">
             {loading && <Spinner />}
 

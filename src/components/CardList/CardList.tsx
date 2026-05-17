@@ -21,7 +21,10 @@ export const CardList = ({ pokemonList, onPokemonSelect }: CardListProps) => {
             key={pokemon.name}
             type="button"
             className="card"
-            onClick={() => onPokemonSelect?.(pokemonId)}
+            onClick={(event) => {
+              event.stopPropagation();
+              onPokemonSelect?.(pokemonId);
+            }}
           >
             <h3>{pokemon.name}</h3>
             <p className="card-description">Pokemon #{pokemonId}</p>
