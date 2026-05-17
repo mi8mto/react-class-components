@@ -28,7 +28,11 @@ export const Pagination = ({
   };
 
   return (
-    <div className="pagination" aria-label="Pagination">
+    <div
+      className="pagination"
+      aria-label="Pagination"
+      onClick={(event) => event.stopPropagation()}
+    >
       <button
         type="button"
         onClick={handlePrevious}
