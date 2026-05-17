@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Search } from '../../components/Search/Search';
 import { CardList } from '../../components/CardList/CardList';
+import { Pagination } from '../../components/Pagination/Pagination';
 import { fetchPokemon } from '../../services/api';
 import type { Pokemon } from '../../types/api';
 import { Spinner } from '../../components/Spinner/Spinner';
@@ -9,17 +10,24 @@ import { ErrorMessage } from '../../components/ErrorMessage/ErrorMessage';
 import { ErrorButton } from '../../components/ErrorButton/ErrorButton';
 
 const SEARCH_STORAGE_KEY = 'searchTerm';
+const ITEMS_PER_PAGE = 4;
 
 export const MainPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const pageParam = searchParams.get('page');
   const currentPage = pageParam ? Number(pageParam) : 1;
-  void currentPage;
 
   const [pokemonList, setPokemonList] = useState<Pokemon[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  const totalPages = Math.ceil(pokemonList.length / ITEMS_PER_PAGE);
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const visiblePokemonList = pokemonList.slice(
+    startIndex,
+    startIndex + ITEMS_PER_PAGE
+  );
 
   useEffect(() => {
     if (!pageParam) {
@@ -54,6 +62,10 @@ export const MainPage = () => {
     }
   }, []);
 
+  const handlePageChange = (page: number) => {
+    setSearchParams({ page: String(page) });
+  };
+
   useEffect(() => {
     const savedTerm = localStorage.getItem(SEARCH_STORAGE_KEY) ?? '';
 
@@ -76,7 +88,15 @@ export const MainPage = () => {
         {error && <ErrorMessage message={error} />}
 
         {!loading && !error && pokemonList.length > 0 && (
-          <CardList pokemonList={pokemonList} />
+          <>
+            <CardList pokemonList={visiblePokemonList} />
+
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+            />
+          </>
         )}
 
         {!loading && !error && pokemonList.length === 0 && (
