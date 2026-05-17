@@ -32,3 +32,33 @@ export const fetchPokemon = async (
 
   return data;
 };
+
+export interface PokemonDetails {
+  id: number;
+  name: string;
+  height: number;
+  weight: number;
+  base_experience: number;
+  sprites: {
+    front_default: string | null;
+  };
+  types: {
+    type: {
+      name: string;
+    };
+  }[];
+}
+
+export const fetchPokemonDetails = async (
+  pokemonId: string
+): Promise<PokemonDetails> => {
+  const response = await fetch(
+    `https://pokeapi.co/api/v2/pokemon/${pokemonId}`
+  );
+
+  if (!response.ok) {
+    throw new Error('Failed to fetch pokemon details');
+  }
+
+  return response.json() as Promise<PokemonDetails>;
+};
