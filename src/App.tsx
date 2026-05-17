@@ -1,88 +1,30 @@
-import { Component } from 'react';
-import { Search } from './components/Search/Search';
-import { CardList } from './components/CardList/CardList';
-import { fetchPokemon } from './services/api';
-import type { Pokemon } from './types/api';
-import { Spinner } from './components/Spinner/Spinner';
-import { ErrorMessage } from './components/ErrorMessage/ErrorMessage';
-import { ErrorButton } from './components/ErrorButton/ErrorButton';
+import { Link, Route, Routes } from 'react-router-dom';
+import { MainPage } from './pages/MainPage/MainPage';
+import { AboutPage } from './pages/AboutPage/AboutPage';
+import { NotFoundPage } from './pages/NotFoundPage/NotFoundPage';
+import { PokemonDetailsPage } from './pages/PokemonDetailsPage/PokemonDetailsPage';
 import './App.css';
 
-interface AppState {
-  pokemonList: Pokemon[];
-  loading: boolean;
-  error: string | null;
-}
+const App = () => {
+  return (
+    <>
+      <header className="app-header">
+        <nav className="app-nav" aria-label="Main navigation">
+          <Link to="/?page=1">Home</Link>
+          <Link to="/about">About</Link>
+        </nav>
+      </header>
 
-class App extends Component<object, AppState> {
-  constructor(props: object) {
-    super(props);
+      <Routes>
+        <Route path="/" element={<MainPage />}>
+          <Route path="details" element={<PokemonDetailsPage />} />
+        </Route>
 
-    this.state = {
-      pokemonList: [],
-      loading: true,
-      error: null,
-    };
-  }
-
-  componentDidMount() {
-    const savedTerm = localStorage.getItem('searchTerm');
-
-    if (savedTerm) {
-      this.loadPokemon(savedTerm);
-    } else {
-      this.loadPokemon('');
-    }
-  }
-
-  loadPokemon = async (search: string) => {
-    try {
-      this.setState({
-        loading: true,
-        error: null,
-      });
-
-      await new Promise((resolve) => setTimeout(resolve, 300));
-
-      const data = await fetchPokemon(search);
-
-      this.setState({
-        pokemonList: data.results,
-        loading: false,
-      });
-    } catch (error) {
-      console.error(error);
-
-      this.setState({
-        error: 'Failed to load data',
-        loading: false,
-      });
-    }
-  };
-
-  render() {
-    const { pokemonList, loading, error } = this.state;
-
-    return (
-      <div className="app-container">
-        <Search onSearch={this.loadPokemon} />
-        <div className="results-section">
-          {loading && <Spinner />}
-
-          {error && <ErrorMessage message={error} />}
-
-          {!loading && !error && pokemonList.length > 0 && (
-            <CardList pokemonList={pokemonList} />
-          )}
-
-          {!loading && !error && pokemonList.length === 0 && (
-            <p>No results found</p>
-          )}
-        </div>
-        <ErrorButton />
-      </div>
-    );
-  }
-}
+        <Route path="/about" element={<AboutPage />} />
+        <Route path="*" element={<NotFoundPage />} />
+      </Routes>
+    </>
+  );
+};
 
 export default App;

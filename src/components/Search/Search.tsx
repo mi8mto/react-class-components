@@ -1,76 +1,45 @@
-import { Component } from 'react';
+import { useRef } from 'react';
+import { useLocalStorage } from '../../hooks/useLocalStorage';
 
 const STORAGE_KEY = 'searchTerm';
-
-interface SearchState {
-  searchTerm: string;
-}
 
 interface SearchProps {
   onSearch: (search: string) => void;
 }
 
-export class Search extends Component<SearchProps, SearchState> {
-  private lastSearch = '';
+export const Search = ({ onSearch }: SearchProps) => {
+  const [searchTerm, setSearchTerm] = useLocalStorage(STORAGE_KEY);
+  const lastSearch = useRef(searchTerm);
 
-  constructor(props: SearchProps) {
-    super(props);
-
-    this.state = {
-      searchTerm: '',
-    };
-  }
-
-  componentDidMount() {
-    const savedTerm = localStorage.getItem(STORAGE_KEY);
-
-    if (savedTerm) {
-      this.setState({
-        searchTerm: savedTerm,
-      });
-
-      this.lastSearch = savedTerm;
-    }
-  }
-
-  handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    this.setState({
-      searchTerm: event.target.value,
-    });
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(event.target.value);
   };
 
-  handleSearch = () => {
-    const trimmed = this.state.searchTerm.trim();
+  const handleSearch = () => {
+    const trimmed = searchTerm.trim();
 
-    // ❗ защита от пустого значения и повторного запроса
-    if (!trimmed || trimmed === this.lastSearch) return;
+    if (!trimmed || trimmed === lastSearch.current) return;
 
-    this.lastSearch = trimmed;
+    lastSearch.current = trimmed;
 
-    localStorage.setItem(STORAGE_KEY, trimmed);
+    setSearchTerm(trimmed);
 
-    this.props.onSearch(trimmed);
+    onSearch(trimmed);
   };
 
-  render() {
-    return (
-      <div className="search-section">
-        <input
-          type="text"
-          placeholder="Search characters..."
-          value={this.state.searchTerm}
-          onChange={this.handleChange}
-          className="search-input"
-        />
+  return (
+    <div className="search-section">
+      <input
+        type="text"
+        placeholder="Search characters..."
+        value={searchTerm}
+        onChange={handleChange}
+        className="search-input"
+      />
 
-        <button
-          type="button"
-          onClick={this.handleSearch}
-          className="search-button"
-        >
-          Search
-        </button>
-      </div>
-    );
-  }
-}
+      <button type="button" onClick={handleSearch} className="search-button">
+        Search
+      </button>
+    </div>
+  );
+};

@@ -1,9 +1,18 @@
 import { render, screen, waitFor } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
 import App from './App';
 import * as api from './services/api';
 import type { ApiResponse } from './types/api';
 
 vi.mock('./services/api');
+
+const renderApp = () => {
+  return render(
+    <MemoryRouter initialEntries={['/']}>
+      <App />
+    </MemoryRouter>
+  );
+};
 
 describe('App component', () => {
   beforeEach(() => {
@@ -12,7 +21,8 @@ describe('App component', () => {
   });
 
   test('shows loading initially', () => {
-    render(<App />);
+    renderApp();
+
     expect(screen.getByLabelText(/loading/i)).toBeInTheDocument();
   });
 
@@ -24,7 +34,7 @@ describe('App component', () => {
 
     vi.mocked(api.fetchPokemon).mockResolvedValue(mockData);
 
-    render(<App />);
+    renderApp();
 
     await waitFor(() => {
       expect(screen.getByText('pikachu')).toBeInTheDocument();
@@ -39,7 +49,7 @@ describe('App component', () => {
       results: [],
     });
 
-    render(<App />);
+    renderApp();
 
     await waitFor(() => {
       expect(api.fetchPokemon).toHaveBeenCalledWith('pikachu');
@@ -49,7 +59,7 @@ describe('App component', () => {
   test('shows error message when API fails', async () => {
     vi.mocked(api.fetchPokemon).mockRejectedValue(new Error('API error'));
 
-    render(<App />);
+    renderApp();
 
     await waitFor(() => {
       expect(screen.getByText(/failed to load data/i)).toBeInTheDocument();
@@ -62,7 +72,7 @@ describe('App component', () => {
       results: [],
     });
 
-    render(<App />);
+    renderApp();
 
     await waitFor(() => {
       expect(screen.getByText(/no results found/i)).toBeInTheDocument();

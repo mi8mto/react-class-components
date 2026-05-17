@@ -1,30 +1,36 @@
-import { Component } from 'react';
 import type { Pokemon } from '../../types/api';
 
 interface CardListProps {
   pokemonList: Pokemon[];
+  onPokemonSelect?: (pokemonId: string) => void;
 }
 
-export class CardList extends Component<CardListProps> {
-  private getPokemonId(url: string): string {
-    const segments = url.replace(/\/$/, '').split('/');
-    return segments[segments.length - 1];
-  }
+const getPokemonId = (url: string): string => {
+  const segments = url.replace(/\/$/, '').split('/');
+  return segments[segments.length - 1];
+};
 
-  render() {
-    const { pokemonList } = this.props;
+export const CardList = ({ pokemonList, onPokemonSelect }: CardListProps) => {
+  return (
+    <>
+      {pokemonList.map((pokemon) => {
+        const pokemonId = getPokemonId(pokemon.url);
 
-    return (
-      <>
-        {pokemonList.map((pokemon) => (
-          <div key={pokemon.name} className="card">
+        return (
+          <button
+            key={pokemon.name}
+            type="button"
+            className="card"
+            onClick={(event) => {
+              event.stopPropagation();
+              onPokemonSelect?.(pokemonId);
+            }}
+          >
             <h3>{pokemon.name}</h3>
-            <p className="card-description">
-              Pokemon #{this.getPokemonId(pokemon.url)}
-            </p>
-          </div>
-        ))}
-      </>
-    );
-  }
-}
+            <p className="card-description">Pokemon #{pokemonId}</p>
+          </button>
+        );
+      })}
+    </>
+  );
+};
