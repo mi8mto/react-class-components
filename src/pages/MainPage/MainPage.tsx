@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Search } from '../../components/Search/Search';
 import { CardList } from '../../components/CardList/CardList';
 import { fetchPokemon } from '../../services/api';
@@ -7,79 +7,63 @@ import { Spinner } from '../../components/Spinner/Spinner';
 import { ErrorMessage } from '../../components/ErrorMessage/ErrorMessage';
 import { ErrorButton } from '../../components/ErrorButton/ErrorButton';
 
-interface MainPageState {
-  pokemonList: Pokemon[];
-  loading: boolean;
-  error: string | null;
-}
+const SEARCH_STORAGE_KEY = 'searchTerm';
 
-export class MainPage extends Component<object, MainPageState> {
-  constructor(props: object) {
-    super(props);
+export const MainPage = () => {
+  const [pokemonList, setPokemonList] = useState<Pokemon[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-    this.state = {
-      pokemonList: [],
-      loading: true,
-      error: null,
-    };
-  }
-
-  componentDidMount() {
-    const savedTerm = localStorage.getItem('searchTerm');
-
-    if (savedTerm) {
-      this.loadPokemon(savedTerm);
-    } else {
-      this.loadPokemon('');
-    }
-  }
-
-  loadPokemon = async (search: string) => {
+  const loadPokemon = useCallback(async (search: string) => {
     try {
-      this.setState({
-        loading: true,
-        error: null,
-      });
+      setLoading(true);
+      setError(null);
 
       await new Promise((resolve) => setTimeout(resolve, 300));
 
       const data = await fetchPokemon(search);
 
-      this.setState({
-        pokemonList: data.results,
-        loading: false,
-      });
+      setPokemonList(data.results);
+      setLoading(false);
     } catch (error) {
       console.error(error);
 
-      this.setState({
-        error: 'Failed to load data',
-        loading: false,
-      });
+      setError('Failed to load data');
+      setLoading(false);
     }
+  }, []);
+
+useEffect(() => {
+  const savedTerm = localStorage.getItem(SEARCH_STORAGE_KEY) ?? '';
+
+  const timeoutId = window.setTimeout(() => {
+    void loadPokemon(savedTerm);
+  }, 0);
+
+  return () => {
+    window.clearTimeout(timeoutId);
   };
+}, [loadPokemon]);
 
-  render() {
-    const { pokemonList, loading, error } = this.state;
+  return (
+    <div className="app-container">
+      <Search onSearch={loadPokemon} />
 
-    return (
-      <div className="app-container">
-        <Search onSearch={this.loadPokemon} />
-        <div className="results-section">
-          {loading && <Spinner />}
+      <div className="results-section">
+        {loading && <Spinner />}
 
-          {error && <ErrorMessage message={error} />}
+        {error && <ErrorMessage message={error} />}
 
-          {!loading && !error && pokemonList.length > 0 && (
-            <CardList pokemonList={pokemonList} />
-          )}
+        {!loading && !error && pokemonList.length > 0 && (
+          <CardList pokemonList={pokemonList} />
+        )}
 
-          {!loading && !error && pokemonList.length === 0 && (
-            <p>No results found</p>
-          )}
-        </div>
-        <ErrorButton />
+        {!loading && !error && pokemonList.length === 0 && (
+          <p>No results found</p>
+        )}
       </div>
-    );
-  }
-}
+
+      <ErrorButton />
+    </div>
+  );
+};
