@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { Outlet, useNavigate, useSearchParams } from 'react-router-dom';
 import { Search } from '../../components/Search/Search';
 import { CardList } from '../../components/CardList/CardList';
 import { Pagination } from '../../components/Pagination/Pagination';
@@ -14,6 +14,7 @@ const ITEMS_PER_PAGE = 4;
 
 export const MainPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
 
   const pageParam = searchParams.get('page');
   const detailsParam = searchParams.get('details');
@@ -84,7 +85,7 @@ export const MainPage = () => {
     nextParams.set('page', String(currentPage));
     nextParams.set('details', pokemonId);
 
-    setSearchParams(nextParams);
+    navigate(`/details?${nextParams.toString()}`);
   };
 
   useEffect(() => {
@@ -103,29 +104,35 @@ export const MainPage = () => {
     <div className="app-container">
       <Search onSearch={handleSearch} />
 
-      <div className="results-section">
-        {loading && <Spinner />}
+      <div className="content-layout">
+        <main className="main-panel">
+          <div className="results-section">
+            {loading && <Spinner />}
 
-        {error && <ErrorMessage message={error} />}
+            {error && <ErrorMessage message={error} />}
 
-        {!loading && !error && pokemonList.length > 0 && (
-          <>
-            <CardList
-              pokemonList={visiblePokemonList}
-              onPokemonSelect={handlePokemonSelect}
-            />
+            {!loading && !error && pokemonList.length > 0 && (
+              <>
+                <CardList
+                  pokemonList={visiblePokemonList}
+                  onPokemonSelect={handlePokemonSelect}
+                />
 
-            <Pagination
-              currentPage={currentPage}
-              totalPages={totalPages}
-              onPageChange={handlePageChange}
-            />
-          </>
-        )}
+                <Pagination
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  onPageChange={handlePageChange}
+                />
+              </>
+            )}
 
-        {!loading && !error && pokemonList.length === 0 && (
-          <p>No results found</p>
-        )}
+            {!loading && !error && pokemonList.length === 0 && (
+              <p>No results found</p>
+            )}
+          </div>
+        </main>
+
+        <Outlet />
       </div>
 
       <ErrorButton />
