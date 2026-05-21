@@ -1,8 +1,9 @@
+import type { MouseEvent } from 'react';
 import type { Pokemon } from '../../types/api';
 
 interface CardListProps {
   pokemonList: Pokemon[];
-  onPokemonSelect?: (pokemonId: string) => void;
+  onPokemonSelect: (pokemonId: string) => void;
 }
 
 const getPokemonId = (url: string): string => {
@@ -11,6 +12,16 @@ const getPokemonId = (url: string): string => {
 };
 
 export const CardList = ({ pokemonList, onPokemonSelect }: CardListProps) => {
+  const handleCardClick = (event: MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation();
+
+    const pokemonId = event.currentTarget.dataset.pokemonId;
+
+    if (pokemonId) {
+      onPokemonSelect(pokemonId);
+    }
+  };
+
   return (
     <>
       {pokemonList.map((pokemon) => {
@@ -21,10 +32,8 @@ export const CardList = ({ pokemonList, onPokemonSelect }: CardListProps) => {
             key={pokemon.name}
             type="button"
             className="card"
-            onClick={(event) => {
-              event.stopPropagation();
-              onPokemonSelect?.(pokemonId);
-            }}
+            data-pokemon-id={pokemonId}
+            onClick={handleCardClick}
           >
             <h3>{pokemon.name}</h3>
             <p className="card-description">Pokemon #{pokemonId}</p>

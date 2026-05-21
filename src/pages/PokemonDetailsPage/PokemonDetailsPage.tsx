@@ -21,8 +21,6 @@ export const PokemonDetailsPage = () => {
       return;
     }
 
-    const controller = new AbortController();
-
     const loadDetails = async () => {
       try {
         setLoading(true);
@@ -30,26 +28,17 @@ export const PokemonDetailsPage = () => {
 
         const data = await fetchPokemonDetails(detailsId);
 
-        if (!controller.signal.aborted) {
-          setPokemonDetails(data);
-        }
+        setPokemonDetails(data);
       } catch (error) {
-        if (!controller.signal.aborted) {
-          console.error(error);
-          setError('Failed to load details');
-        }
+        console.error(error);
+
+        setError('Failed to load details');
       } finally {
-        if (!controller.signal.aborted) {
-          setLoading(false);
-        }
+        setLoading(false);
       }
     };
 
     void loadDetails();
-
-    return () => {
-      controller.abort();
-    };
   }, [detailsId]);
 
   const handleClose = () => {

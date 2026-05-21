@@ -1,3 +1,5 @@
+import type { MouseEvent } from 'react';
+
 interface PaginationProps {
   currentPage: number;
   totalPages: number;
@@ -27,6 +29,14 @@ export const Pagination = ({
     }
   };
 
+  const handlePageClick = (event: MouseEvent<HTMLButtonElement>) => {
+    const page = Number(event.currentTarget.dataset.page);
+
+    if (!Number.isNaN(page)) {
+      onPageChange(page);
+    }
+  };
+
   return (
     <div
       className="pagination"
@@ -45,7 +55,8 @@ export const Pagination = ({
         <button
           key={page}
           type="button"
-          onClick={() => onPageChange(page)}
+          data-page={page}
+          onClick={handlePageClick}
           disabled={page === currentPage}
           aria-current={page === currentPage ? 'page' : undefined}
         >
