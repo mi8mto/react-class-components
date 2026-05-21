@@ -432,3 +432,92 @@
   background-color: rgba(255, 255, 255, 0.1);
   transform: translateY(-2px);
 }
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.card-checkbox {
+  width: 18px;
+  height: 18px;
+
+  margin: 0;
+
+  accent-color: var(--primary);
+
+  cursor: pointer;
+
+  flex-shrink: 0;
+}
+
+.selection-bar {
+  position: sticky;
+  bottom: 20px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+
+  margin-top: 32px;
+  padding: 18px 24px;
+
+  background-color: rgba(30, 41, 59, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 18px;
+
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+
+  box-shadow: var(--shadow);
+  z-index: 20;
+}
+
+.selection-bar p {
+  margin: 0;
+  font-weight: 600;
+}
+
+.selection-bar-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.selection-bar button {
+  padding: 10px 16px;
+
+  border: 1px solid var(--card-border);
+  border-radius: 10px;
+
+  background-color: rgba(255, 255, 255, 0.06);
+  color: var(--text);
+
+  cursor: pointer;
+
+  transition:
+    background-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.selection-bar button:hover {
+  background-color: rgba(255, 255, 255, 0.12);
+  transform: translateY(-2px);
+}
+
+@media (max-width: 640px) {
+  .selection-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .selection-bar-actions {
+    width: 100%;
+  }
+
+  .selection-bar button {
+    width: 100%;
+  }
+}

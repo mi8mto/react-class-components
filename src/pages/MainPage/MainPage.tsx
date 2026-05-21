@@ -8,6 +8,7 @@ import type { Pokemon } from '../../types/api';
 import { Spinner } from '../../components/Spinner/Spinner';
 import { ErrorMessage } from '../../components/ErrorMessage/ErrorMessage';
 import { ErrorButton } from '../../components/ErrorButton/ErrorButton';
+import { SelectionBar } from '../../components/SelectionBar/SelectionBar';
 
 const SEARCH_STORAGE_KEY = 'searchTerm';
 const ITEMS_PER_PAGE = 4;
@@ -135,6 +136,8 @@ export const MainPage = () => {
 
         <Outlet />
       </div>
+
+      <SelectionBar />
 
       <ErrorButton />
     </div>
