@@ -21,9 +21,44 @@
 
   --shadow:
     0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
-
   --shadow-hover:
     0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+
+  --input-border: rgba(255, 255, 255, 0.1);
+
+  --selection-bar-bg: rgba(30, 41, 59, 0.95);
+}
+
+[data-theme='light'] {
+  --text: rgba(17, 24, 39, 1);
+  --text-muted: rgb(40, 63, 94);
+
+  --bg-gradient: linear-gradient(
+    135deg,
+    rgb(196, 199, 202) 0%,
+    rgb(239, 244, 250) 100%
+  );
+
+  --card-bg: rgba(255, 255, 255, 0.74);
+  --card-border: rgba(15, 23, 42, 0.08);
+
+  --primary: rgba(37, 99, 235, 1);
+  --primary-hover: rgba(29, 78, 216, 1);
+
+  --error: rgba(220, 38, 38, 1);
+  --error-bg: rgba(220, 38, 38, 0.08);
+
+  --shadow:
+    0 10px 15px -3px rgba(15, 23, 42, 0.08),
+    0 4px 6px -2px rgba(15, 23, 42, 0.04);
+
+  --shadow-hover:
+    0 20px 25px -5px rgba(15, 23, 42, 0.12),
+    0 10px 10px -5px rgba(15, 23, 42, 0.08);
+
+  --input-border: rgba(15, 23, 42, 0.15);
+
+  --selection-bar-bg: rgba(255, 255, 255, 0.92);
 }
 
 body {
@@ -50,7 +85,7 @@ body {
 h1,
 h2,
 h3 {
-  color: rgba(255, 255, 255, 1);
+  color: var(--text);
   margin-top: 0;
   font-weight: 600;
 }
