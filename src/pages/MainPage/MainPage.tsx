@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Outlet, useNavigate, useSearchParams } from 'react-router-dom';
 import { Search } from '../../components/Search/Search';
 import { CardList } from '../../components/CardList/CardList';
@@ -8,6 +8,7 @@ import type { Pokemon } from '../../types/api';
 import { Spinner } from '../../components/Spinner/Spinner';
 import { ErrorMessage } from '../../components/ErrorMessage/ErrorMessage';
 import { ErrorButton } from '../../components/ErrorButton/ErrorButton';
+import { SelectionBar } from '../../components/SelectionBar/SelectionBar';
 
 const SEARCH_STORAGE_KEY = 'searchTerm';
 const ITEMS_PER_PAGE = 4;
@@ -33,19 +34,11 @@ export const MainPage = () => {
 
   useEffect(() => {
     if (!pageParam) {
-      const timeoutId = window.setTimeout(() => {
-        setSearchParams({ page: '1' }, { replace: true });
-      }, 0);
-
-      return () => {
-        window.clearTimeout(timeoutId);
-      };
+      setSearchParams({ page: '1' }, { replace: true });
     }
-
-    return undefined;
   }, [pageParam, setSearchParams]);
 
-  const loadPokemon = useCallback(async (search: string) => {
+  const loadPokemon = async (search: string) => {
     try {
       setLoading(true);
       setError(null);
@@ -62,7 +55,7 @@ export const MainPage = () => {
       setError('Failed to load data');
       setLoading(false);
     }
-  }, []);
+  };
 
   const handlePageChange = (page: number) => {
     const nextParams = new URLSearchParams(searchParams);
@@ -102,14 +95,12 @@ export const MainPage = () => {
   useEffect(() => {
     const savedTerm = localStorage.getItem(SEARCH_STORAGE_KEY) ?? '';
 
-    const timeoutId = window.setTimeout(() => {
-      void loadPokemon(savedTerm);
-    }, 0);
-
-    return () => {
-      window.clearTimeout(timeoutId);
+    const loadInitialPokemon = async () => {
+      await loadPokemon(savedTerm);
     };
-  }, [loadPokemon]);
+
+    void loadInitialPokemon();
+  }, []);
 
   return (
     <div className="app-container">
@@ -145,6 +136,8 @@ export const MainPage = () => {
 
         <Outlet />
       </div>
+
+      <SelectionBar />
 
       <ErrorButton />
     </div>
