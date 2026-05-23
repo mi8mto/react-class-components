@@ -1,5 +1,6 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
+import { ThemeProvider } from './context/ThemeContext';
 import App from './App';
 import * as api from './services/api';
 import type { ApiResponse } from './types/api';
@@ -8,9 +9,11 @@ vi.mock('./services/api');
 
 const renderApp = () => {
   return render(
-    <MemoryRouter initialEntries={['/']}>
-      <App />
-    </MemoryRouter>
+    <ThemeProvider>
+      <MemoryRouter initialEntries={['/']}>
+        <App />
+      </MemoryRouter>
+    </ThemeProvider>
   );
 };
 

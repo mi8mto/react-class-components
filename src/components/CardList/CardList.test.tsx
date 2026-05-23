@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { vi } from 'vitest';
 import { CardList } from './CardList';
 import type { Pokemon } from '../../types/api';
@@ -36,5 +36,27 @@ describe('CardList component', () => {
     render(<CardList pokemonList={[]} onPokemonSelect={onPokemonSelect} />);
 
     expect(screen.queryByText(/.+/)).not.toBeInTheDocument();
+  });
+
+  test('calls onPokemonSelect when card clicked', () => {
+    const handlePokemonSelect = vi.fn();
+
+    const pokemonList: Pokemon[] = [
+      {
+        name: 'pikachu',
+        url: 'https://pokeapi.co/api/v2/pokemon/25/',
+      },
+    ];
+
+    render(
+      <CardList
+        pokemonList={pokemonList}
+        onPokemonSelect={handlePokemonSelect}
+      />
+    );
+
+    fireEvent.click(screen.getByRole('button'));
+
+    expect(handlePokemonSelect).toHaveBeenCalledWith('25');
   });
 });
