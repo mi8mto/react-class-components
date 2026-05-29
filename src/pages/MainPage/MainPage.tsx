@@ -3,8 +3,7 @@ import { Outlet, useNavigate, useSearchParams } from 'react-router-dom';
 import { Search } from '../../components/Search/Search';
 import { CardList } from '../../components/CardList/CardList';
 import { Pagination } from '../../components/Pagination/Pagination';
-import { fetchPokemon } from '../../services/api';
-import type { Pokemon } from '../../types/api';
+import { usePokemonQuery } from '../../hooks';
 import { Spinner } from '../../components/Spinner/Spinner';
 import { ErrorMessage } from '../../components/ErrorMessage/ErrorMessage';
 import { ErrorButton } from '../../components/ErrorButton/ErrorButton';
@@ -21,9 +20,13 @@ export const MainPage = () => {
   const detailsParam = searchParams.get('details');
   const currentPage = pageParam ? Number(pageParam) : 1;
 
-  const [pokemonList, setPokemonList] = useState<Pokemon[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [searchTerm, setSearchTerm] = useState(
+    () => localStorage.getItem(SEARCH_STORAGE_KEY) ?? ''
+  );
+
+  const { data, isLoading, error } = usePokemonQuery(searchTerm, currentPage);
+
+  const pokemonList = data?.results ?? [];
 
   const totalPages = Math.ceil(pokemonList.length / ITEMS_PER_PAGE);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
@@ -38,25 +41,6 @@ export const MainPage = () => {
     }
   }, [pageParam, setSearchParams]);
 
-  const loadPokemon = async (search: string) => {
-    try {
-      setLoading(true);
-      setError(null);
-
-      await new Promise((resolve) => setTimeout(resolve, 300));
-
-      const data = await fetchPokemon(search);
-
-      setPokemonList(data.results);
-      setLoading(false);
-    } catch (error) {
-      console.error(error);
-
-      setError('Failed to load data');
-      setLoading(false);
-    }
-  };
-
   const handlePageChange = (page: number) => {
     const nextParams = new URLSearchParams(searchParams);
 
@@ -67,8 +51,8 @@ export const MainPage = () => {
   };
 
   const handleSearch = (search: string) => {
+    setSearchTerm(search);
     navigate('/?page=1');
-    void loadPokemon(search);
   };
 
   const handlePokemonSelect = (pokemonId: string) => {
@@ -92,16 +76,6 @@ export const MainPage = () => {
     navigate(`/?${nextParams.toString()}`);
   };
 
-  useEffect(() => {
-    const savedTerm = localStorage.getItem(SEARCH_STORAGE_KEY) ?? '';
-
-    const loadInitialPokemon = async () => {
-      await loadPokemon(savedTerm);
-    };
-
-    loadInitialPokemon();
-  }, []);
-
   return (
     <div className="app-container">
       <Search onSearch={handleSearch} />
@@ -109,11 +83,11 @@ export const MainPage = () => {
       <div className="content-layout">
         <main className="main-panel" onClick={handleCloseDetails}>
           <div className="results-section">
-            {loading && <Spinner />}
+            {isLoading && <Spinner />}
 
-            {error && <ErrorMessage message={error} />}
+            {error && <ErrorMessage message="Failed to load data" />}
 
-            {!loading && !error && pokemonList.length > 0 && (
+            {!isLoading && !error && pokemonList.length > 0 && (
               <>
                 <CardList
                   pokemonList={visiblePokemonList}
@@ -128,17 +102,15 @@ export const MainPage = () => {
               </>
             )}
 
-            {!loading && !error && pokemonList.length === 0 && (
+            {!isLoading && !error && pokemonList.length === 0 && (
               <p>No results found</p>
             )}
           </div>
         </main>
-
         <Outlet />
       </div>
 
       <SelectionBar />
-
       <ErrorButton />
     </div>
   );
