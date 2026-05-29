@@ -8,6 +8,7 @@ import { Spinner } from '../../components/Spinner/Spinner';
 import { ErrorMessage } from '../../components/ErrorMessage/ErrorMessage';
 import { ErrorButton } from '../../components/ErrorButton/ErrorButton';
 import { SelectionBar } from '../../components/SelectionBar/SelectionBar';
+import { RefreshButton } from '../../components/RefreshButton/RefreshButton';
 
 const SEARCH_STORAGE_KEY = 'searchTerm';
 const ITEMS_PER_PAGE = 4;
@@ -79,6 +80,8 @@ export const MainPage = () => {
   return (
     <div className="app-container">
       <Search onSearch={handleSearch} />
+
+      <RefreshButton />
 
       <div className="content-layout">
         <main className="main-panel" onClick={handleCloseDetails}>
