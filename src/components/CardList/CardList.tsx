@@ -14,7 +14,7 @@ const getPokemonId = (url: string): string => {
 };
 
 export const CardList = ({ pokemonList, onPokemonSelect }: CardListProps) => {
-  const { selectedPokemons, selectPokemon, unselectPokemon } =
+  const { selectPokemon, unselectPokemon, isPokemonSelected } =
     usePokemonStore();
 
   const handleCardClick = (event: MouseEvent<HTMLButtonElement>) => {
@@ -27,58 +27,49 @@ export const CardList = ({ pokemonList, onPokemonSelect }: CardListProps) => {
     }
   };
 
-  const handleCheckboxClick = (event: MouseEvent<HTMLInputElement>) => {
+  const handleCheckboxClick = (
+    event: MouseEvent<HTMLInputElement>,
+    pokemonId: string,
+    pokemonName: string,
+    pokemonUrl: string
+  ) => {
     event.stopPropagation();
 
-    const pokemonId = event.currentTarget.dataset.pokemonId;
-    const pokemonName = event.currentTarget.dataset.pokemonName;
-    const pokemonUrl = event.currentTarget.dataset.pokemonUrl;
-
-    if (!pokemonId || !pokemonName || !pokemonUrl) {
+    if (isPokemonSelected(pokemonId)) {
+      unselectPokemon(pokemonId);
       return;
     }
 
-    const isSelected = selectedPokemons.some(
-      (pokemon) => pokemon.id === pokemonId
-    );
-
-    if (isSelected) {
-      unselectPokemon(pokemonId);
-    } else {
-      selectPokemon({
-        id: pokemonId,
-        name: pokemonName,
-        url: pokemonUrl,
-      });
-    }
+    selectPokemon({
+      id: pokemonId,
+      name: pokemonName,
+      url: pokemonUrl,
+    });
   };
 
   return (
     <>
-      {pokemonList.map((pokemon) => {
-        const pokemonId = getPokemonId(pokemon.url);
+      {pokemonList.map(({ name, url }) => {
+        const pokemonId = getPokemonId(url);
 
         return (
           <button
-            key={pokemon.name}
+            key={name}
             type="button"
             className="card"
             data-pokemon-id={pokemonId}
             onClick={handleCardClick}
           >
             <div className="card-header">
-              <h3>{pokemon.name}</h3>
+              <h3>{name}</h3>
 
               <input
                 type="checkbox"
                 className="card-checkbox"
-                checked={selectedPokemons.some(
-                  (selectedPokemon) => selectedPokemon.id === pokemonId
-                )}
-                data-pokemon-id={pokemonId}
-                data-pokemon-name={pokemon.name}
-                data-pokemon-url={pokemon.url}
-                onClick={handleCheckboxClick}
+                checked={isPokemonSelected(pokemonId)}
+                onClick={(event) =>
+                  handleCheckboxClick(event, pokemonId, name, url)
+                }
                 readOnly
               />
             </div>

@@ -38,7 +38,7 @@ export const PokemonDetailsPage = () => {
       }
     };
 
-    void loadDetails();
+    loadDetails();
   }, [detailsId]);
 
   const handleClose = () => {

@@ -99,7 +99,7 @@ export const MainPage = () => {
       await loadPokemon(savedTerm);
     };
 
-    void loadInitialPokemon();
+    loadInitialPokemon();
   }, []);
 
   return (
