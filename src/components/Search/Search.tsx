@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { useLocalStorage } from '../../hooks/useLocalStorage';
+import { useLocalStorage } from '../../hooks';
 
 const STORAGE_KEY = 'searchTerm';
 
