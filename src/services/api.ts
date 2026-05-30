@@ -8,9 +8,7 @@ export const fetchPokemon = async (
 ): Promise<ApiResponse> => {
   const limit = 50;
   const offset = (page - 1) * limit;
-
   const url = `${BASE_URL}?limit=${limit}&offset=${offset}`;
-
   const response = await fetch(url);
 
   if (!response.ok) {

@@ -1,8 +1,7 @@
-import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { fetchPokemonDetails, type PokemonDetails } from '../../services/api';
 import { Spinner } from '../../components/Spinner/Spinner';
 import { ErrorMessage } from '../../components/ErrorMessage/ErrorMessage';
+import { usePokemonDetailsQuery } from '../../hooks';
 
 export const PokemonDetailsPage = () => {
   const [searchParams] = useSearchParams();
@@ -10,42 +9,14 @@ export const PokemonDetailsPage = () => {
 
   const detailsId = searchParams.get('details');
 
-  const [pokemonDetails, setPokemonDetails] = useState<PokemonDetails | null>(
-    null
-  );
-  const [loading, setLoading] = useState(Boolean(detailsId));
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (!detailsId) {
-      return;
-    }
-
-    const loadDetails = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-
-        const data = await fetchPokemonDetails(detailsId);
-
-        setPokemonDetails(data);
-      } catch (error) {
-        console.error(error);
-
-        setError('Failed to load details');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    void loadDetails();
-  }, [detailsId]);
-
+  const {
+    data: pokemonDetails,
+    isLoading,
+    error,
+  } = usePokemonDetailsQuery(detailsId ?? '');
   const handleClose = () => {
     const nextParams = new URLSearchParams(searchParams);
-
     nextParams.delete('details');
-
     navigate(`/?${nextParams.toString()}`);
   };
 
@@ -61,11 +32,11 @@ export const PokemonDetailsPage = () => {
           ×
         </button>
 
-        {loading && <Spinner />}
+        {isLoading && <Spinner />}
 
-        {error && <ErrorMessage message={error} />}
+        {error && <ErrorMessage message="Failed to load details" />}
 
-        {!loading && !error && pokemonDetails && (
+        {!isLoading && !error && pokemonDetails && (
           <div className="details-content">
             <h2>{pokemonDetails.name}</h2>
 

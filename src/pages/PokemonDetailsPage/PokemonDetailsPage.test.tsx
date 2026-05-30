@@ -1,3 +1,4 @@
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render, screen, waitFor } from '@testing-library/react';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { PokemonDetailsPage } from './PokemonDetailsPage';
@@ -5,13 +6,23 @@ import * as api from '../../services/api';
 
 vi.mock('../../services/api');
 
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: false,
+    },
+  },
+});
+
 const renderPokemonDetailsPage = (initialEntry: string) => {
   return render(
-    <MemoryRouter initialEntries={[initialEntry]}>
-      <Routes>
-        <Route path="/details" element={<PokemonDetailsPage />} />
-      </Routes>
-    </MemoryRouter>
+    <QueryClientProvider client={queryClient}>
+      <MemoryRouter initialEntries={[initialEntry]}>
+        <Routes>
+          <Route path="/details" element={<PokemonDetailsPage />} />
+        </Routes>
+      </MemoryRouter>
+    </QueryClientProvider>
   );
 };
 

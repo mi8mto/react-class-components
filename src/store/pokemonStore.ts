@@ -8,13 +8,9 @@ interface SelectedPokemon {
 
 interface PokemonStore {
   selectedPokemons: SelectedPokemon[];
-
   selectPokemon: (pokemon: SelectedPokemon) => void;
-
   unselectPokemon: (pokemonId: string) => void;
-
   clearSelectedPokemons: () => void;
-
   isPokemonSelected: (pokemonId: string) => boolean;
 }
 

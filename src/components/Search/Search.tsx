@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { useLocalStorage } from '../../hooks/useLocalStorage';
+import { useLocalStorage } from '../../hooks';
 
 const STORAGE_KEY = 'searchTerm';
 
@@ -10,20 +10,16 @@ interface SearchProps {
 export const Search = ({ onSearch }: SearchProps) => {
   const [searchTerm, setSearchTerm] = useLocalStorage(STORAGE_KEY);
   const lastSearch = useRef(searchTerm);
-
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
   };
 
   const handleSearch = () => {
     const trimmed = searchTerm.trim();
-
     if (!trimmed || trimmed === lastSearch.current) return;
 
     lastSearch.current = trimmed;
-
     setSearchTerm(trimmed);
-
     onSearch(trimmed);
   };
 
