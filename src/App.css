@@ -24,19 +24,30 @@
   }
 }
 
-.search-section {
+.search-controls {
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
   gap: 16px;
   margin-bottom: 40px;
-  width: 100%;
 }
 
-@media (max-width: 600px) {
-  .search-section {
+.search-section {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+@media (max-width: 768px) {
+  .search-controls {
     flex-direction: column;
-    align-items: stretch;
+    width: 100%;
+  }
+
+  .search-section {
+    width: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
   }
 }
 

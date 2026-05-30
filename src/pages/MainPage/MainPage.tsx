@@ -79,9 +79,10 @@ export const MainPage = () => {
 
   return (
     <div className="app-container">
-      <Search onSearch={handleSearch} />
-
-      <RefreshButton />
+      <div className="search-controls">
+        <Search onSearch={handleSearch} />
+        <RefreshButton />
+      </div>
 
       <div className="content-layout">
         <main className="main-panel" onClick={handleCloseDetails}>

@@ -10,8 +10,8 @@ export const RefreshButton = () => {
   queryClient.invalidateQueries({ queryKey: ['pokemon-details'] });
 
   return (
-    <button type="button" onClick={handleRefresh}>
-      Refresh
+    <button type="button" onClick={handleRefresh} className="search-button">
+      Refresh data
     </button>
   );
 };

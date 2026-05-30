@@ -16,10 +16,8 @@ const getPokemonId = (url: string): string => {
 export const CardList = ({ pokemonList, onPokemonSelect }: CardListProps) => {
   const { selectPokemon, unselectPokemon, isPokemonSelected } =
     usePokemonStore();
-
   const handleCardClick = (event: MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
-
     const pokemonId = event.currentTarget.dataset.pokemonId;
 
     if (pokemonId) {
