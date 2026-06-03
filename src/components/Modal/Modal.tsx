@@ -1,0 +1,45 @@
+import { createPortal } from 'react-dom';
+import { useEffect } from 'react';
+import './Modal.css';
+
+interface ModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  children: React.ReactNode;
+}
+
+export const Modal = ({isOpen,onClose,children}: ModalProps) => {
+  if (!isOpen) {
+    return null;
+  }
+
+  useEffect(() => {
+  const handleKeyDown = (event: KeyboardEvent) => {
+    if (event.key === 'Escape') {
+      onClose();
+    }
+  };
+
+  window.addEventListener('keydown', handleKeyDown);
+
+  return () => {
+    window.removeEventListener('keydown', handleKeyDown);
+  };
+}, [onClose]);
+
+return createPortal(
+  <div
+    className="modal-overlay"
+    onClick={(event) => {
+      if (event.target === event.currentTarget) {
+        onClose();
+      }
+    }}
+  >
+    <div className="modal-content">
+      {children}
+    </div>
+  </div>,
+  document.body
+);
+};
