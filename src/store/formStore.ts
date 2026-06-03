@@ -1,11 +1,5 @@
 import { create } from 'zustand';
-
-export interface Submission {
-  id: string;
-  fullName: string;
-  email: string;
-  createdAt: string;
-}
+import type { Submission } from '../types/form';
 
 interface FormStore {
   submissions: Submission[];
