@@ -9,11 +9,11 @@ interface ModalProps {
 }
 
 export const Modal = ({ isOpen, onClose, children }: ModalProps) => {
-  if (!isOpen) {
-    return null;
-  }
-
   useEffect(() => {
+    if (!isOpen) {
+      return;
+    }
+
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
         onClose();
@@ -25,7 +25,11 @@ export const Modal = ({ isOpen, onClose, children }: ModalProps) => {
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [onClose]);
+  }, [isOpen, onClose]);
+
+  if (!isOpen) {
+    return null;
+  }
 
   return createPortal(
     <div
