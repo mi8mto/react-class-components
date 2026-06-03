@@ -6,14 +6,9 @@ function App() {
 
   return (
     <>
-      <button onClick={() => setIsOpen(true)}>
-        Open modal
-      </button>
+      <button onClick={() => setIsOpen(true)}>Open modal</button>
 
-      <Modal
-        isOpen={isOpen}
-        onClose={() => setIsOpen(false)}
-      >
+      <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
         <h2>Hello Modal</h2>
       </Modal>
     </>
