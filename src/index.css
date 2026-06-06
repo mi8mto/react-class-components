@@ -109,3 +109,9 @@ code {
   padding: 4px 8px;
   background: var(--code-bg);
 }
+
+.submission-new {
+  border: 2px solid green;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}

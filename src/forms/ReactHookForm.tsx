@@ -5,36 +5,49 @@ import type { FormSchema } from '../schemas/formSchema';
 import { formSchema } from '../schemas/formSchema';
 import { useFormStore } from '../store/formStore';
 import { Modal } from '../components/Modal/Modal';
+import { getPasswordStrength } from '../utils/passwordStrength';
+import { fileToBase64 } from '../utils/fileToBase64';
 
 export const ReactHookForm = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-
   const {
     register,
     handleSubmit,
     reset,
-    formState: { errors },
+    watch,
+    formState: { errors, isValid },
   } = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
+    mode: 'onChange',
   });
+
+  const password = watch('password') ?? '';
+  const strength = getPasswordStrength(password);
 
   const addSubmission = useFormStore((state) => state.addSubmission);
   const submissions = useFormStore((state) => state.submissions);
+  const countries = useFormStore((state) => state.countries);
 
-  const onSubmit = (data: FormSchema) => {
+  const onSubmit = async (data: FormSchema) => {
+    const file = data.image?.[0];
+
+    if (!file) {
+      return;
+    }
+
+    const imageBase64 = await fileToBase64(file);
     addSubmission({
       id: crypto.randomUUID(),
       fullName: data.fullName,
       age: data.age,
       email: data.email,
       gender: data.gender,
-      country: '', // временно
-      image: '', // временно
+      country: data.country,
+      image: imageBase64,
       createdAt: new Date().toISOString(),
     });
     reset();
     setIsModalOpen(true);
-    console.log(data);
   };
 
   return (
@@ -75,6 +88,29 @@ export const ReactHookForm = () => {
 
         {errors.gender && <p>{errors.gender.message}</p>}
 
+        <label htmlFor="country">Country</label>
+
+        <input id="country" list="countries" {...register('country')} />
+
+        <label htmlFor="image">Profile Image</label>
+
+        <input
+          id="image"
+          type="file"
+          accept="image/png,image/jpeg"
+          {...register('image')}
+        />
+
+        {errors.image && <p>{String(errors.image.message)}</p>}
+
+        <datalist id="countries">
+          {countries.map((country) => (
+            <option key={country} value={country} />
+          ))}
+        </datalist>
+
+        {errors.country && <p>{errors.country.message}</p>}
+
         <label htmlFor="password">Password</label>
 
         <input
@@ -84,6 +120,12 @@ export const ReactHookForm = () => {
           autoComplete="new-password"
         />
         {errors.password && <p>{errors.password.message}</p>}
+        <ul>
+          <li>{strength.hasNumber ? '✅' : '❌'} Number</li>
+          <li>{strength.hasUppercase ? '✅' : '❌'} Uppercase</li>
+          <li>{strength.hasLowercase ? '✅' : '❌'} Lowercase</li>
+          <li>{strength.hasSpecial ? '✅' : '❌'} Special character</li>
+        </ul>
 
         <label htmlFor="confirmPassword">Confirm Password</label>
 
@@ -103,7 +145,9 @@ export const ReactHookForm = () => {
 
         {errors.terms && <p>{errors.terms.message}</p>}
 
-        <button type="submit">Submit</button>
+        <button type="submit" disabled={!isValid}>
+          Submit
+        </button>
 
         <hr />
 
@@ -112,13 +156,31 @@ export const ReactHookForm = () => {
         {submissions.length === 0 ? (
           <p>No submissions yet</p>
         ) : (
-          submissions.map((submission) => (
-            <div key={submission.id}>
-              <h3>{submission.fullName}</h3>
-              <p>{submission.email}</p>
-              <small>{submission.createdAt}</small>
-            </div>
-          ))
+          submissions.map((submission) => {
+            const isNew =
+              Date.now() - new Date(submission.createdAt).getTime() < 5000;
+
+            return (
+              <div
+                key={submission.id}
+                className={isNew ? 'submission-new' : ''}
+              >
+                {submission.image && (
+                  <img
+                    src={submission.image}
+                    alt={submission.fullName}
+                    width={120}
+                  />
+                )}
+
+                <h3>{submission.fullName}</h3>
+
+                <p>{submission.email}</p>
+
+                <small>{submission.createdAt}</small>
+              </div>
+            );
+          })
         )}
       </form>
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>

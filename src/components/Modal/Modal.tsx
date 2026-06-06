@@ -1,5 +1,5 @@
 import { createPortal } from 'react-dom';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import './Modal.css';
 
 interface ModalProps {
@@ -9,23 +9,27 @@ interface ModalProps {
 }
 
 export const Modal = ({ isOpen, onClose, children }: ModalProps) => {
+  const modalRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (!isOpen) {
       return;
     }
-
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
         onClose();
       }
     };
-
     window.addEventListener('keydown', handleKeyDown);
-
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
   }, [isOpen, onClose]);
+
+  useEffect(() => {
+    if (isOpen) {
+      modalRef.current?.focus();
+    }
+  }, [isOpen]);
 
   if (!isOpen) {
     return null;
@@ -40,7 +44,9 @@ export const Modal = ({ isOpen, onClose, children }: ModalProps) => {
         }
       }}
     >
-      <div className="modal-content">{children}</div>
+      <div ref={modalRef} className="modal-content" tabIndex={-1}>
+        {children}
+      </div>
     </div>,
     document.body,
   );
