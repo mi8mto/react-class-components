@@ -1,17 +1,20 @@
 import { ReactHookForm } from './forms/ReactHookForm';
 import { UncontrolledForm } from './forms/UncontrolledForm';
+import { SubmissionsList } from './components/SubmissionsList/SubmissionsList';
+import './App.css';
 
 function App() {
   return (
-    <>
-      <h1>React Hook Form</h1>
-      <ReactHookForm />
-
-      <hr />
-
-      <h1>Uncontrolled Form</h1>
-      <UncontrolledForm />
-    </>
+    <div className="app-container">
+      <h1 className="page-title">Modern Design Forms</h1>
+      <div className="forms-container">
+        <ReactHookForm />
+        <UncontrolledForm />
+      </div>
+      <div className="submissions-wrapper">
+        <SubmissionsList />
+      </div>
+    </div>
   );
 }
 

@@ -25,7 +25,6 @@ export const ReactHookForm = () => {
   const strength = getPasswordStrength(password);
 
   const addSubmission = useFormStore((state) => state.addSubmission);
-  const submissions = useFormStore((state) => state.submissions);
   const countries = useFormStore((state) => state.countries);
 
   const onSubmit = async (data: FormSchema) => {
@@ -51,141 +50,156 @@ export const ReactHookForm = () => {
   };
 
   return (
-    <>
+    <div className="glass-card">
+      <h2 className="card-title">React Hook Form</h2>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <label htmlFor="fullName">Full Name</label>
-
-        <input id="fullName" {...register('fullName')} autoComplete="name" />
-        {errors.fullName && <p>{errors.fullName.message}</p>}
-
-        <label htmlFor="age">Age</label>
-
-        <input
-          id="age"
-          type="number"
-          {...register('age', {
-            valueAsNumber: true,
-          })}
-        />
-        {errors.age && <p>{errors.age.message}</p>}
-
-        <label htmlFor="email">Email</label>
-
-        <input id="email" {...register('email')} autoComplete="email" />
-        {errors.email && <p>{errors.email.message}</p>}
-
-        <label htmlFor="gender">Gender</label>
-
-        <select id="gender" {...register('gender')}>
-          <option value="">Select gender</option>
-
-          <option value="male">Male</option>
-
-          <option value="female">Female</option>
-
-          <option value="other">Other</option>
-        </select>
-
-        {errors.gender && <p>{errors.gender.message}</p>}
-
-        <label htmlFor="country">Country</label>
-
-        <input id="country" list="countries" {...register('country')} />
-
-        <label htmlFor="image">Profile Image</label>
-
-        <input
-          id="image"
-          type="file"
-          accept="image/png,image/jpeg"
-          {...register('image')}
-        />
-
-        {errors.image && <p>{String(errors.image.message)}</p>}
-
-        <datalist id="countries">
-          {countries.map((country) => (
-            <option key={country} value={country} />
-          ))}
-        </datalist>
-
-        {errors.country && <p>{errors.country.message}</p>}
-
-        <label htmlFor="password">Password</label>
-
-        <input
-          id="password"
-          type="password"
-          {...register('password')}
-          autoComplete="new-password"
-        />
-        {errors.password && <p>{errors.password.message}</p>}
-        <ul>
-          <li>{strength.hasNumber ? '✅' : '❌'} Number</li>
-          <li>{strength.hasUppercase ? '✅' : '❌'} Uppercase</li>
-          <li>{strength.hasLowercase ? '✅' : '❌'} Lowercase</li>
-          <li>{strength.hasSpecial ? '✅' : '❌'} Special character</li>
-        </ul>
-
-        <label htmlFor="confirmPassword">Confirm Password</label>
-
-        <input
-          id="confirmPassword"
-          type="password"
-          {...register('confirmPassword')}
-          autoComplete="new-password"
-        />
-        {errors.confirmPassword && <p>{errors.confirmPassword.message}</p>}
-
-        <div>
-          <input id="terms" type="checkbox" {...register('terms')} />
-
-          <label htmlFor="terms">Accept Terms and Conditions</label>
+        <div className="form-group">
+          <label htmlFor="fullNameHook">Full Name</label>
+          <input
+            id="fullNameHook"
+            className={`input ${errors.fullName ? 'error' : ''}`}
+            {...register('fullName')}
+            autoComplete="name"
+          />
+          {errors.fullName && (
+            <span className="error-message">{errors.fullName.message}</span>
+          )}
         </div>
 
-        {errors.terms && <p>{errors.terms.message}</p>}
+        <div className="form-group">
+          <label htmlFor="ageHook">Age</label>
+          <input
+            id="ageHook"
+            className={`input ${errors.age ? 'error' : ''}`}
+            type="number"
+            {...register('age', {
+              valueAsNumber: true,
+            })}
+          />
+          {errors.age && (
+            <span className="error-message">{errors.age.message}</span>
+          )}
+        </div>
 
-        <button type="submit" disabled={!isValid}>
+        <div className="form-group">
+          <label htmlFor="emailHook">Email</label>
+          <input
+            id="emailHook"
+            className={`input ${errors.email ? 'error' : ''}`}
+            {...register('email')}
+            autoComplete="email"
+          />
+          {errors.email && (
+            <span className="error-message">{errors.email.message}</span>
+          )}
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="genderHook">Gender</label>
+          <select
+            id="genderHook"
+            className={`select ${errors.gender ? 'error' : ''}`}
+            {...register('gender')}
+          >
+            <option value="">Select gender</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+            <option value="other">Other</option>
+          </select>
+          {errors.gender && (
+            <span className="error-message">{errors.gender.message}</span>
+          )}
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="countryHook">Country</label>
+          <input
+            id="countryHook"
+            className={`input ${errors.country ? 'error' : ''}`}
+            list="countriesHook"
+            {...register('country')}
+          />
+          <datalist id="countriesHook">
+            {countries.map((country) => (
+              <option key={country} value={country} />
+            ))}
+          </datalist>
+          {errors.country && (
+            <span className="error-message">{errors.country.message}</span>
+          )}
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="imageHook">Profile Image</label>
+          <div className="file-upload-container">
+            <input
+              id="imageHook"
+              className="file-input"
+              type="file"
+              accept="image/png,image/jpeg"
+              {...register('image')}
+            />
+          </div>
+          {errors.image && (
+            <span className="error-message">
+              {String(errors.image.message)}
+            </span>
+          )}
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="passwordHook">Password</label>
+          <input
+            id="passwordHook"
+            className={`input ${errors.password ? 'error' : ''}`}
+            type="password"
+            {...register('password')}
+            autoComplete="new-password"
+          />
+          {errors.password && (
+            <span className="error-message">{errors.password.message}</span>
+          )}
+          <ul className="password-strength-list">
+            <li>{strength.hasNumber ? '✅' : '❌'} Number</li>
+            <li>{strength.hasUppercase ? '✅' : '❌'} Uppercase</li>
+            <li>{strength.hasLowercase ? '✅' : '❌'} Lowercase</li>
+            <li>{strength.hasSpecial ? '✅' : '❌'} Special character</li>
+          </ul>
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="confirmPasswordHook">Confirm Password</label>
+          <input
+            id="confirmPasswordHook"
+            className={`input ${errors.confirmPassword ? 'error' : ''}`}
+            type="password"
+            {...register('confirmPassword')}
+            autoComplete="new-password"
+          />
+          {errors.confirmPassword && (
+            <span className="error-message">
+              {errors.confirmPassword.message}
+            </span>
+          )}
+        </div>
+
+        <div className="form-group">
+          <div className="checkbox-container">
+            <input id="termsHook" type="checkbox" {...register('terms')} />
+            <label htmlFor="termsHook">Accept Terms and Conditions</label>
+          </div>
+          {errors.terms && (
+            <span className="error-message">{errors.terms.message}</span>
+          )}
+        </div>
+
+        <button className="btn-primary" type="submit" disabled={!isValid}>
           Submit
         </button>
-
-        <hr />
-
-        <h2>Submissions</h2>
-
-        {submissions.length === 0 ? (
-          <p>No submissions yet</p>
-        ) : (
-          submissions.map((submission) => {
-            const isNew =
-              Date.now() - new Date(submission.createdAt).getTime() < 5000;
-
-            return (
-              <div
-                key={submission.id}
-                className={isNew ? 'submission-new' : ''}
-              >
-                {submission.image && (
-                  <img
-                    src={submission.image}
-                    alt={submission.fullName}
-                    width={120}
-                  />
-                )}
-
-                <h3>{submission.fullName}</h3>
-
-                <p>{submission.email}</p>
-
-                <small>{submission.createdAt}</small>
-              </div>
-            );
-          })
-        )}
       </form>
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
         <h2>Form submitted successfully!</h2>
       </Modal>
-    </>
+    </div>
   );
 };

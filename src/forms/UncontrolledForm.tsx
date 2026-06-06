@@ -66,74 +66,125 @@ export const UncontrolledForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <label htmlFor="fullName">Full Name</label>
-      <input id="fullName" ref={fullNameRef} autoComplete="name" />
-      {errors.fullName && <p>{errors.fullName[0]}</p>}
+    <div className="glass-card">
+      <h2 className="card-title">Uncontrolled Form</h2>
+      <form onSubmit={handleSubmit}>
+        <div className="form-group">
+          <label htmlFor="fullNameUnc">Full Name</label>
+          <input
+            id="fullNameUnc"
+            className={`input ${errors.fullName ? 'error' : ''}`}
+            ref={fullNameRef}
+            autoComplete="name"
+          />
+          {errors.fullName && <span className="error-message">{errors.fullName[0]}</span>}
+        </div>
 
-      <label htmlFor="age">Age</label>
-      <input id="age" ref={ageRef} type="number" />
-      {errors.age && <p>{errors.age[0]}</p>}
+        <div className="form-group">
+          <label htmlFor="ageUnc">Age</label>
+          <input
+            id="ageUnc"
+            className={`input ${errors.age ? 'error' : ''}`}
+            ref={ageRef}
+            type="number"
+          />
+          {errors.age && <span className="error-message">{errors.age[0]}</span>}
+        </div>
 
-      <label htmlFor="email">Email</label>
-      <input id="email" ref={emailRef} autoComplete="email" />
-      {errors.email && <p>{errors.email[0]}</p>}
+        <div className="form-group">
+          <label htmlFor="emailUnc">Email</label>
+          <input
+            id="emailUnc"
+            className={`input ${errors.email ? 'error' : ''}`}
+            ref={emailRef}
+            autoComplete="email"
+          />
+          {errors.email && <span className="error-message">{errors.email[0]}</span>}
+        </div>
 
-      <label htmlFor="gender">Gender</label>
-      <select id="gender" ref={genderRef}>
-        <option value="">Select gender</option>
-        <option value="male">Male</option>
-        <option value="female">Female</option>
-        <option value="other">Other</option>
-      </select>
-      {errors.gender && <p>{errors.gender[0]}</p>}
+        <div className="form-group">
+          <label htmlFor="genderUnc">Gender</label>
+          <select
+            id="genderUnc"
+            className={`select ${errors.gender ? 'error' : ''}`}
+            ref={genderRef}
+          >
+            <option value="">Select gender</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+            <option value="other">Other</option>
+          </select>
+          {errors.gender && <span className="error-message">{errors.gender[0]}</span>}
+        </div>
 
-      <label htmlFor="country">Country</label>
-      <input id="country" ref={countryRef} list="countries" />
+        <div className="form-group">
+          <label htmlFor="countryUnc">Country</label>
+          <input
+            id="countryUnc"
+            className={`input ${errors.country ? 'error' : ''}`}
+            ref={countryRef}
+            list="countriesUnc"
+          />
+          <datalist id="countriesUnc">
+            {countries.map((country) => (
+              <option key={country} value={country} />
+            ))}
+          </datalist>
+          {errors.country && <span className="error-message">{errors.country[0]}</span>}
+        </div>
 
-      <datalist id="countries">
-        {countries.map((country) => (
-          <option key={country} value={country} />
-        ))}
-      </datalist>
+        <div className="form-group">
+          <label htmlFor="imageUnc">Profile Image</label>
+          <div className="file-upload-container">
+            <input
+              id="imageUnc"
+              className="file-input"
+              ref={imageRef}
+              type="file"
+              accept="image/png,image/jpeg"
+            />
+          </div>
+          {errors.image && <span className="error-message">{errors.image[0]}</span>}
+        </div>
 
-      {errors.country && <p>{errors.country[0]}</p>}
+        <div className="form-group">
+          <label htmlFor="passwordUnc">Password</label>
+          <input
+            id="passwordUnc"
+            className={`input ${errors.password ? 'error' : ''}`}
+            ref={passwordRef}
+            type="password"
+            autoComplete="new-password"
+          />
+          {errors.password && <span className="error-message">{errors.password[0]}</span>}
+        </div>
 
-      <label htmlFor="image">Profile Image</label>
-      <input
-        id="image"
-        ref={imageRef}
-        type="file"
-        accept="image/png,image/jpeg"
-      />
-      {errors.image && <p>{errors.image[0]}</p>}
+        <div className="form-group">
+          <label htmlFor="confirmPasswordUnc">Confirm Password</label>
+          <input
+            id="confirmPasswordUnc"
+            className={`input ${errors.confirmPassword ? 'error' : ''}`}
+            ref={confirmPasswordRef}
+            type="password"
+            autoComplete="new-password"
+          />
+          {errors.confirmPassword && (
+            <span className="error-message">{errors.confirmPassword[0]}</span>
+          )}
+        </div>
 
-      <label htmlFor="password">Password</label>
-      <input
-        id="password"
-        ref={passwordRef}
-        type="password"
-        autoComplete="new-password"
-      />
-      {errors.password && <p>{errors.password[0]}</p>}
+        <div className="form-group">
+          <div className="checkbox-container">
+            <input id="termsUnc" ref={termsRef} type="checkbox" />
+            <label htmlFor="termsUnc">Accept Terms and Conditions</label>
+          </div>
+          {errors.terms && <span className="error-message">{errors.terms[0]}</span>}
+        </div>
 
-      <label htmlFor="confirmPassword">Confirm Password</label>
-      <input
-        id="confirmPassword"
-        ref={confirmPasswordRef}
-        type="password"
-        autoComplete="new-password"
-      />
-      {errors.confirmPassword && <p>{errors.confirmPassword[0]}</p>}
-
-      <div>
-        <input id="terms" ref={termsRef} type="checkbox" />
-        <label htmlFor="terms">Accept Terms and Conditions</label>
-      </div>
-
-      {errors.terms && <p>{errors.terms[0]}</p>}
-
-      <button type="submit">Submit</button>
-    </form>
+        <button className="btn-primary" type="submit">
+          Submit
+        </button>
+      </form>
+    </div>
   );
 };
