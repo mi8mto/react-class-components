@@ -14,7 +14,20 @@ export const formSchema = z
 
     age: z.number().min(0, 'Age cannot be negative'),
 
-    email: z.email('Please enter a valid email address'),
+    email: z.string().refine((value) => {
+      const parts = value.split('@');
+      if (parts.length !== 2) {
+        return false;
+      }
+      const [local, domain] = parts;
+      if (!local) {
+        return false;
+      }
+      if (!domain.includes('.')) {
+        return false;
+      }
+      return true;
+    }, 'Please enter a valid email address'),
 
     gender: z.enum(['male', 'female', 'other']),
 

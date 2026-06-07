@@ -3,7 +3,11 @@ import { formSchema } from '../schemas/formSchema';
 import { useFormStore } from '../store/formStore';
 import { fileToBase64 } from '../utils/fileToBase64';
 
-export const UncontrolledForm = () => {
+interface UncontrolledFormProps {
+  onSuccess?: () => void;
+}
+
+export const UncontrolledForm = ({ onSuccess }: UncontrolledFormProps) => {
   const fullNameRef = useRef<HTMLInputElement>(null);
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
@@ -21,6 +25,8 @@ export const UncontrolledForm = () => {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
+    const form = event.currentTarget;
 
     const data = {
       fullName: fullNameRef.current?.value ?? '',
@@ -60,9 +66,9 @@ export const UncontrolledForm = () => {
       createdAt: new Date().toISOString(),
     });
 
+    form.reset();
     setErrors({});
-
-    console.log(result.data);
+    onSuccess?.();
   };
 
   return (
@@ -77,7 +83,9 @@ export const UncontrolledForm = () => {
             ref={fullNameRef}
             autoComplete="name"
           />
-          {errors.fullName && <span className="error-message">{errors.fullName[0]}</span>}
+          {errors.fullName && (
+            <span className="error-message">{errors.fullName[0]}</span>
+          )}
         </div>
 
         <div className="form-group">
@@ -99,7 +107,9 @@ export const UncontrolledForm = () => {
             ref={emailRef}
             autoComplete="email"
           />
-          {errors.email && <span className="error-message">{errors.email[0]}</span>}
+          {errors.email && (
+            <span className="error-message">{errors.email[0]}</span>
+          )}
         </div>
 
         <div className="form-group">
@@ -114,7 +124,9 @@ export const UncontrolledForm = () => {
             <option value="female">Female</option>
             <option value="other">Other</option>
           </select>
-          {errors.gender && <span className="error-message">{errors.gender[0]}</span>}
+          {errors.gender && (
+            <span className="error-message">{errors.gender[0]}</span>
+          )}
         </div>
 
         <div className="form-group">
@@ -130,7 +142,9 @@ export const UncontrolledForm = () => {
               <option key={country} value={country} />
             ))}
           </datalist>
-          {errors.country && <span className="error-message">{errors.country[0]}</span>}
+          {errors.country && (
+            <span className="error-message">{errors.country[0]}</span>
+          )}
         </div>
 
         <div className="form-group">
@@ -144,7 +158,9 @@ export const UncontrolledForm = () => {
               accept="image/png,image/jpeg"
             />
           </div>
-          {errors.image && <span className="error-message">{errors.image[0]}</span>}
+          {errors.image && (
+            <span className="error-message">{errors.image[0]}</span>
+          )}
         </div>
 
         <div className="form-group">
@@ -156,7 +172,9 @@ export const UncontrolledForm = () => {
             type="password"
             autoComplete="new-password"
           />
-          {errors.password && <span className="error-message">{errors.password[0]}</span>}
+          {errors.password && (
+            <span className="error-message">{errors.password[0]}</span>
+          )}
         </div>
 
         <div className="form-group">
@@ -178,7 +196,9 @@ export const UncontrolledForm = () => {
             <input id="termsUnc" ref={termsRef} type="checkbox" />
             <label htmlFor="termsUnc">Accept Terms and Conditions</label>
           </div>
-          {errors.terms && <span className="error-message">{errors.terms[0]}</span>}
+          {errors.terms && (
+            <span className="error-message">{errors.terms[0]}</span>
+          )}
         </div>
 
         <button className="btn-primary" type="submit">

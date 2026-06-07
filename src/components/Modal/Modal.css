@@ -1,12 +1,10 @@
 .modal-overlay {
   position: fixed;
   inset: 0;
-
   display: flex;
   justify-content: center;
   align-items: center;
-
-  background: rgba(0, 0, 0, 0.4);
+  background: #00000066;
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
   z-index: 1000;
@@ -14,22 +12,18 @@
 }
 
 .modal-content {
-  min-width: 320px;
-  max-width: 90%;
-  padding: 2.5rem;
+  width: 700px;
+  max-width: 95vw;
+  padding: 1rem;
   border-radius: 20px;
-
-  /* Glassmorphism Effect */
-  background: rgba(30, 41, 59, 0.85);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: #1e293bd9;
+  border: 1px solid #ffffff26;
   box-shadow:
-    0 25px 50px -12px rgba(0, 0, 0, 0.5),
-    0 0 0 1px rgba(255, 255, 255, 0.05);
-
+    0 25px 50px -12px #00000080,
+    0 0 0 1px #ffffff0d;
   color: #f8fafc;
   text-align: center;
-  outline: none; /* remove focus outline on tabIndex=-1 */
-
+  outline: none;
   animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 

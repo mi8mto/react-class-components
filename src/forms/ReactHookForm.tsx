@@ -1,15 +1,16 @@
-import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { FormSchema } from '../schemas/formSchema';
 import { formSchema } from '../schemas/formSchema';
 import { useFormStore } from '../store/formStore';
-import { Modal } from '../components/Modal/Modal';
 import { getPasswordStrength } from '../utils/passwordStrength';
 import { fileToBase64 } from '../utils/fileToBase64';
 
-export const ReactHookForm = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+interface ReactHookFormProps {
+  onSuccess?: () => void;
+}
+
+export const ReactHookForm = ({ onSuccess }: ReactHookFormProps) => {
   const {
     register,
     handleSubmit,
@@ -29,11 +30,9 @@ export const ReactHookForm = () => {
 
   const onSubmit = async (data: FormSchema) => {
     const file = data.image?.[0];
-
     if (!file) {
       return;
     }
-
     const imageBase64 = await fileToBase64(file);
     addSubmission({
       id: crypto.randomUUID(),
@@ -46,7 +45,7 @@ export const ReactHookForm = () => {
       createdAt: new Date().toISOString(),
     });
     reset();
-    setIsModalOpen(true);
+    onSuccess?.();
   };
 
   return (
@@ -197,9 +196,9 @@ export const ReactHookForm = () => {
           Submit
         </button>
       </form>
-      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+      {/* <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
         <h2>Form submitted successfully!</h2>
-      </Modal>
+      </Modal> */}
     </div>
   );
 };

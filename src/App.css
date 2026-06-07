@@ -16,17 +16,31 @@ h1.page-title {
   text-shadow: 0 0 20px #ffffff1a;
 }
 
-.forms-container {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 2rem;
-  align-items: stretch;
+.buttons-container {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
 }
 
-@media (min-width: 768px) {
-  .forms-container {
-    grid-template-columns: 1fr 1fr;
-  }
+.buttons-container button {
+  padding: 1rem 2rem;
+  background: var(--glass-bg);
+  border: 1px solid var(--accent);
+  color: var(--text-primary);
+  border-radius: var(--input-radius);
+  font-size: 1.1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
+  box-shadow: 0 4px 12px #0000001a;
+}
+
+.buttons-container button:hover {
+  background: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px #2563eb66;
 }
 
 .glass-card {
