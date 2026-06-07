@@ -83,7 +83,7 @@ label {
 .select {
   width: 100%;
   padding: 0.75rem 1rem;
-  background: rgba(15, 23, 42, 0.6);
+  background: #0f172a99;
   border: 1px solid var(--border-color);
   border-radius: var(--input-radius);
   color: var(--text-primary);
@@ -91,6 +91,16 @@ label {
   font-size: 1rem;
   transition: var(--transition);
   box-sizing: border-box;
+}
+
+.select {
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 1em;
+  padding-right: 2.5rem;
 }
 
 .input:focus,
@@ -142,7 +152,7 @@ label {
   height: 1.25rem;
   border: 1px solid var(--border-color);
   border-radius: 4px;
-  background: rgba(15, 23, 42, 0.6);
+  background: #0f172a99;
   cursor: pointer;
   position: relative;
   transition: var(--transition);
@@ -223,6 +233,8 @@ label {
 }
 ::-webkit-scrollbar-track {
   background: #0000001a;
+  border-radius: 8px;
+  margin-block: 16px;
 }
 ::-webkit-scrollbar-thumb {
   background: #ffffff33;
