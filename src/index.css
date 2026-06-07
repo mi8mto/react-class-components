@@ -5,7 +5,7 @@
   --text-primary: #f8fafc;
   --text-secondary: #94a3b8;
   --border-color: #ffffff1a;
-  --glass-bg: #1e293b80; 
+  --glass-bg: #1e293b80;
   --glass-border: #ffffff1a;
   --glass-shadow: 0 8px 32px 0 #0000005e;
   --error: #ef4444;
@@ -103,7 +103,6 @@ label {
 
 .input:focus,
 .select:focus {
-  outline: none;
   border-color: var(--accent);
   box-shadow: 0 0 0 3px #2563eb33;
 }

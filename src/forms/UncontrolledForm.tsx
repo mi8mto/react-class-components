@@ -2,6 +2,7 @@ import { useRef, useState } from 'react';
 import { formSchema } from '../schemas/formSchema';
 import { useFormStore } from '../store/formStore';
 import { fileToBase64 } from '../utils/fileToBase64';
+import { getPasswordStrength } from '../utils/passwordStrength';
 
 interface UncontrolledFormProps {
   onSuccess?: () => void;
@@ -18,16 +19,14 @@ export const UncontrolledForm = ({ onSuccess }: UncontrolledFormProps) => {
   const termsRef = useRef<HTMLInputElement>(null);
   const imageRef = useRef<HTMLInputElement>(null);
   const countries = useFormStore((state) => state.countries);
-
   const [errors, setErrors] = useState<Record<string, string[]>>({});
-
+  const [password, setPassword] = useState('');
+  const strength = getPasswordStrength(password);
   const addSubmission = useFormStore((state) => state.addSubmission);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
     const form = event.currentTarget;
-
     const data = {
       fullName: fullNameRef.current?.value ?? '',
       age: Number(ageRef.current?.value ?? 0),
@@ -41,14 +40,12 @@ export const UncontrolledForm = ({ onSuccess }: UncontrolledFormProps) => {
     };
 
     const result = formSchema.safeParse(data);
-
     if (!result.success) {
       setErrors(result.error.flatten().fieldErrors);
       return;
     }
 
     const file = result.data.image?.[0];
-
     if (!file) {
       return;
     }
@@ -68,6 +65,7 @@ export const UncontrolledForm = ({ onSuccess }: UncontrolledFormProps) => {
 
     form.reset();
     setErrors({});
+    setPassword('');
     onSuccess?.();
   };
 
@@ -171,10 +169,17 @@ export const UncontrolledForm = ({ onSuccess }: UncontrolledFormProps) => {
             ref={passwordRef}
             type="password"
             autoComplete="new-password"
+            onChange={(e) => setPassword(e.target.value)}
           />
           {errors.password && (
             <span className="error-message">{errors.password[0]}</span>
           )}
+          <ul className="password-strength-list">
+            <li>{strength.hasNumber ? '✅' : '❌'} Number</li>
+            <li>{strength.hasUppercase ? '✅' : '❌'} Uppercase</li>
+            <li>{strength.hasLowercase ? '✅' : '❌'} Lowercase</li>
+            <li>{strength.hasSpecial ? '✅' : '❌'} Special character</li>
+          </ul>
         </div>
 
         <div className="form-group">
