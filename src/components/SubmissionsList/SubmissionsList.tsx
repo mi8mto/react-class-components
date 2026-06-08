@@ -3,7 +3,7 @@ import { useFormStore } from '../../store/formStore';
 
 export const SubmissionsList = () => {
   const submissions = useFormStore((state) => state.submissions);
-  const [now, setNow] = useState(Date.now());
+  const [now, setNow] = useState(() => Date.now());
 
   useEffect(() => {
     const timer = setInterval(() => {
