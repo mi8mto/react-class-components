@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import { useCo2Data } from '../../hooks/useCo2Data';
 import { LoadingSpinner } from '../loading-spinner/loading-spinner';
 import { SearchBar } from '../search-bar/search-bar';
@@ -32,12 +32,16 @@ export const App = () => {
     isColumnModalOpen: false,
   });
 
-  const years = data ? getAvailableYears(data) : [];
-  const availableColumns = getAvailableColumns();
+  const years = useMemo(() => (data ? getAvailableYears(data) : []), [data]);
 
-  const handleSearch = (value: string) => {
-    setState({ ...state, searchQuery: value });
-  };
+  const availableColumns = useMemo(() => getAvailableColumns(), []);
+
+  const handleSearch = useCallback((value: string) => {
+    setState((prev) => ({
+      ...prev,
+      searchQuery: value,
+    }));
+  }, []);
 
   const handleYearChange = (year: number) => {
     setState({ ...state, selectedYear: year });
