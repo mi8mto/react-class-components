@@ -179,4 +179,4 @@ The application performance was significantly improved by applying React optimiz
 
 The largest performance gains were achieved during sorting and year changes, where render times were reduced by more than 75%.
 
-Virtualization provided the most substantial improvement by limiting rendering to only visible list items, dramatically reducing the amount of work performed by React.
+Virtualization provided the most substantial improvement by limiting rendering to only visible list items, dramatically reducing the amount of work performed by React. Report reviewed and finalized.
