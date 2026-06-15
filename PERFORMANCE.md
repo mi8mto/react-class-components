@@ -4,29 +4,29 @@
 
 ### 1. Stable Keys
 
-Changed list rendering keys from array indexes to stable country IDs.
+Replaced unstable array index keys with stable country IDs to improve reconciliation and prevent unnecessary re-renders.
 
 ### 2. useMemo
 
-Applied memoization for:
+Applied memoization for expensive computations:
 
 - Country filtering
 - Country sorting
+- Available years generation
+- Available columns generation
 - Derived application data
-- Available years
-- Available columns
 
 ### 3. useCallback
 
-Applied memoization for event handlers:
+Applied memoization for event handlers to prevent unnecessary function recreation and child component re-renders:
 
 - Search handler
 - Modal toggle handler
-- Other frequently recreated callbacks
+- State update handlers
 
 ### 4. React.memo
 
-Applied memoization for:
+Prevented unnecessary component re-renders by memoizing:
 
 - CountryCard
 - DataTable
@@ -36,63 +36,123 @@ Applied memoization for:
 
 Implemented list virtualization using `@tanstack/react-virtual`.
 
-This reduced the number of rendered country cards from hundreds to only visible items.
+Only visible items are rendered, significantly reducing the number of DOM nodes and improving rendering performance.
 
 ---
 
 # Baseline Measurements
 
-## Interaction A: Sort countries
+## Interaction A: Sort Countries
 
-- Render duration: **388.2 ms**
-- Screenshot Ranked: `screenshots/baseline/sort-ranked.jpg`
-- Screenshot Flamegraph: `screenshots/baseline/sort-flamegraph.jpg`
+**Render Duration:** 388.2 ms
 
-## Interaction B: Search countries
+### Ranked
 
-- Render duration: **24.1 ms**
-- Screenshot Ranked: `screenshots/baseline/search-ranked.jpg`
-- Screenshot Flamegraph: `screenshots/baseline/search-flamegraph.jpg`
+![Baseline Sort Ranked](screenshots/baseline/sort-ranked.jpg)
 
-## Interaction C: Change year
+### Flamegraph
 
-- Render duration: **416.8 ms**
-- Screenshot Ranked: `screenshots/baseline/year-ranked.jpg`
-- Screenshot Flamegraph: `screenshots/baseline/year-flamegraph.jpg`
+![Baseline Sort Flamegraph](screenshots/baseline/sort-flamegraph.jpg)
 
-## Interaction D: Toggle column
+---
 
-- Render duration: **26.5 ms**
-- Screenshot Ranked: `screenshots/baseline/toggle-ranked.jpg`
-- Screenshot Flamegraph: `screenshots/baseline/toggle-flamegraph.jpg`
+## Interaction B: Search Countries
+
+**Render Duration:** 24.1 ms
+
+### Ranked
+
+![Baseline Search Ranked](screenshots/baseline/search-ranked.jpg)
+
+### Flamegraph
+
+![Baseline Search Flamegraph](screenshots/baseline/search-flamegraph.jpg)
+
+---
+
+## Interaction C: Change Year
+
+**Render Duration:** 416.8 ms
+
+### Ranked
+
+![Baseline Year Ranked](screenshots/baseline/year-ranked.jpg)
+
+### Flamegraph
+
+![Baseline Year Flamegraph](screenshots/baseline/year-flamegraph.jpg)
+
+---
+
+## Interaction D: Toggle Column
+
+**Render Duration:** 26.5 ms
+
+### Ranked
+
+![Baseline Toggle Ranked](screenshots/baseline/toggle-ranked.jpg)
+
+### Flamegraph
+
+![Baseline Toggle Flamegraph](screenshots/baseline/toggle-flamegraph.jpg)
 
 ---
 
 # Optimized Measurements
 
-## Interaction A: Sort countries
+## Interaction A: Sort Countries
 
-- Render duration: **17.4 ms**
-- Screenshot Ranked: `screenshots/optimized/sort-ranked.jpg`
-- Screenshot Flamegraph: `screenshots/optimized/sort-flamegraph.jpg`
+**Render Duration:** 17.4 ms
 
-## Interaction B: Search countries
+### Ranked
 
-- Render duration: **11 ms**
-- Screenshot Ranked: `screenshots/optimized/search-ranked.jpg`
-- Screenshot Flamegraph: `screenshots/optimized/search-flamegraph.jpg`
+![Optimized Sort Ranked](screenshots/optimized/sort-ranked.jpg)
 
-## Interaction C: Change year
+### Flamegraph
 
-- Render duration: **97.1 ms**
-- Screenshot Ranked: `screenshots/optimized/year-ranked.jpg`
-- Screenshot Flamegraph: `screenshots/optimized/year-flamegraph.jpg`
+![Optimized Sort Flamegraph](screenshots/optimized/sort-flamegraph.jpg)
 
-## Interaction D: Toggle column
+---
 
-- Render duration: **6.9 ms**
-- Screenshot Ranked: `screenshots/optimized/toggle-ranked.jpg`
-- Screenshot Flamegraph: `screenshots/optimized/toggle-flamegraph.jpg`
+## Interaction B: Search Countries
+
+**Render Duration:** 11.0 ms
+
+### Ranked
+
+![Optimized Search Ranked](screenshots/optimized/search-ranked.jpg)
+
+### Flamegraph
+
+![Optimized Search Flamegraph](screenshots/optimized/search-flamegraph.jpg)
+
+---
+
+## Interaction C: Change Year
+
+**Render Duration:** 97.1 ms
+
+### Ranked
+
+![Optimized Year Ranked](screenshots/optimized/year-ranked.jpg)
+
+### Flamegraph
+
+![Optimized Year Flamegraph](screenshots/optimized/year-flamegraph.jpg)
+
+---
+
+## Interaction D: Toggle Column
+
+**Render Duration:** 6.9 ms
+
+### Ranked
+
+![Optimized Toggle Ranked](screenshots/optimized/toggle-ranked.jpg)
+
+### Flamegraph
+
+![Optimized Toggle Flamegraph](screenshots/optimized/toggle-flamegraph.jpg)
 
 ---
 
@@ -100,20 +160,23 @@ This reduced the number of rendered country cards from hundreds to only visible 
 
 | Interaction      | Baseline (ms) | Optimized (ms) | Improvement |
 | ---------------- | ------------: | -------------: | ----------: |
-| Sort countries   |         388.2 |           17.4 |       95.5% |
-| Search countries |          24.1 |           11.0 |       54.4% |
-| Change year      |         416.8 |           97.1 |       76.7% |
-| Toggle column    |          26.5 |            6.9 |       74.0% |
+| Sort Countries   |         388.2 |           17.4 |       95.5% |
+| Search Countries |          24.1 |           11.0 |       54.4% |
+| Change Year      |         416.8 |           97.1 |       76.7% |
+| Toggle Column    |          26.5 |            6.9 |       74.0% |
 
-## Overall Result
+---
 
-The application performance was significantly improved through memoization, stable keys, and virtualization.
+# Conclusion
 
-The biggest gains were achieved in:
+The application performance was significantly improved by applying React optimization techniques:
 
-- List rendering
-- Country sorting
-- Year switching
-- Country filtering
+- Stable keys for list rendering
+- Memoization with `useMemo`
+- Callback memoization with `useCallback`
+- Component memoization using `React.memo`
+- List virtualization using `@tanstack/react-virtual`
 
-Virtualization provided the largest performance improvement by reducing the number of rendered components.
+The largest performance gains were achieved during sorting and year changes, where render times were reduced by more than 75%.
+
+Virtualization provided the most substantial improvement by limiting rendering to only visible list items, dramatically reducing the amount of work performed by React.
