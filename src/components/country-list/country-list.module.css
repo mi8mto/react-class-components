@@ -1,0 +1,20 @@
+.countryList {
+  padding: 16px;
+}
+
+.virtualContainer {
+  height: 800px;
+  overflow: auto;
+}
+
+.virtualContent {
+  position: relative;
+  width: 100%;
+}
+
+.virtualItem {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+}
