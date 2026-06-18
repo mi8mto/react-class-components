@@ -1,0 +1,10 @@
+{
+  "Navigation": {
+    "home": "Главная",
+    "about": "О проекте"
+  },
+  "HomePage": {
+    "title": "Поиск Покемонов",
+    "description": "Миграция на Next.js выполняется"
+  }
+}

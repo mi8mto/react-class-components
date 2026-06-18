@@ -1,0 +1,10 @@
+{
+  "Navigation": {
+    "home": "Home",
+    "about": "About"
+  },
+  "HomePage": {
+    "title": "Pokemon Search App",
+    "description": "Next.js migration in progress"
+  }
+}
