@@ -1,8 +1,8 @@
 import { Link, Route, Routes } from 'react-router-dom';
-import { MainPage } from './pages/MainPage/MainPage';
-import { AboutPage } from './pages/AboutPage/AboutPage';
-import { NotFoundPage } from './pages/NotFoundPage/NotFoundPage';
-import { PokemonDetailsPage } from './pages/PokemonDetailsPage/PokemonDetailsPage';
+import { MainPage } from './screens/MainPage/MainPage';
+import { AboutPage } from './screens/AboutPage/AboutPage';
+import { NotFoundPage } from './screens/NotFoundPage/NotFoundPage';
+import { PokemonDetailsPage } from './screens/PokemonDetailsPage/PokemonDetailsPage';
 import { ThemeToggle } from './components/ThemeToggle/ThemeToggle';
 import './App.css';
 
