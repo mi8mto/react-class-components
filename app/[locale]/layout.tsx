@@ -1,4 +1,5 @@
 import { NextIntlClientProvider } from 'next-intl';
+import { Providers } from '../../src/providers/providers';
 import { getMessages } from 'next-intl/server';
 import { Link } from '../../src/i18n/navigation';
 
@@ -11,13 +12,15 @@ export default async function LocaleLayout({
 
   return (
     <NextIntlClientProvider messages={messages}>
-      <header>
-        <nav>
-          <Link href="/">Home</Link> <Link href="/about">About</Link>
-        </nav>
-      </header>
+      <Providers>
+        <header>
+          <nav>
+            <Link href="/">Home</Link> <Link href="/about">About</Link>
+          </nav>
+        </header>
 
-      {children}
+        {children}
+      </Providers>
     </NextIntlClientProvider>
   );
 }
