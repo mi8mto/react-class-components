@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { PokemonDetailsPage } from '../PokemonDetailsPage/PokemonDetailsPage';
+import { ErrorButton } from '../../components/ErrorButton/ErrorButton';
 import { Search } from '../../components/Search/Search';
 import { CardList } from '../../components/CardList/CardList';
 import { Pagination } from '../../components/Pagination/Pagination';
@@ -102,11 +103,7 @@ export const MainPage = () => {
       </div>
 
       <SelectionBar />
+      <ErrorButton />
     </div>
   );
 };
-
-// TODO:
-// - Restore ErrorButton
-// - Implement app/error.tsx
-// - Verify ErrorBoundary behavior in Next.js
