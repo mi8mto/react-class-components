@@ -1,13 +1,12 @@
 'use client';
 import { useState } from 'react';
-// import { Outlet, useNavigate, useSearchParams } from 'react-router-dom';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { Search } from '../../components/Search/Search';
 import { CardList } from '../../components/CardList/CardList';
 import { Pagination } from '../../components/Pagination/Pagination';
 import { usePokemonQuery } from '../../hooks';
 import { Spinner } from '../../components/Spinner/Spinner';
 import { ErrorMessage } from '../../components/ErrorMessage/ErrorMessage';
-// import { ErrorButton } from '../../components/ErrorButton/ErrorButton';
 import { SelectionBar } from '../../components/SelectionBar/SelectionBar';
 import { RefreshButton } from '../../components/RefreshButton/RefreshButton';
 
@@ -15,19 +14,13 @@ const SEARCH_STORAGE_KEY = 'searchTerm';
 const ITEMS_PER_PAGE = 4;
 
 export const MainPage = () => {
-  // const [searchParams, setSearchParams] = useSearchParams();
-  // const navigate = useNavigate();
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
-  // const pageParam = searchParams.get('page');
+  const pageParam = searchParams.get('page');
   // const detailsParam = searchParams.get('details');
-  // const currentPage = pageParam ? Number(pageParam) : 1;
 
-  const currentPage = 1;
-  // const detailsParam = null;
-
-  // const [searchTerm, setSearchTerm] = useState(
-  //   () => localStorage.getItem(SEARCH_STORAGE_KEY) ?? ''
-  // );
+  const currentPage = pageParam ? Number(pageParam) : 1;
 
   const [searchTerm, setSearchTerm] = useState(() => {
     if (typeof window === 'undefined') {
@@ -48,42 +41,19 @@ export const MainPage = () => {
     startIndex + ITEMS_PER_PAGE
   );
 
-  // useEffect(() => {
-  //   if (!pageParam) {
-  //     setSearchParams({ page: '1' }, { replace: true });
-  //   }
-  // }, [pageParam, setSearchParams]);
+  const handlePageChange = (page: number) => {
+    const params = new URLSearchParams(searchParams.toString());
 
-  // const handlePageChange = (page: number) => {
-  //   const nextParams = new URLSearchParams(searchParams);
-  //   nextParams.set('page', String(page));
-  //   nextParams.delete('details');
-  //   navigate(`/?${nextParams.toString()}`);
-  // };
+    params.set('page', String(page));
 
-  const handlePageChange = () => {};
+    router.push(`?${params.toString()}`);
+  };
 
   const handleSearch = (search: string) => {
     setSearchTerm(search);
   };
 
-  // const handlePokemonSelect = (pokemonId: string) => {
-  //   const nextParams = new URLSearchParams(searchParams);
-  //   nextParams.set('page', String(currentPage));
-  //   nextParams.set('details', pokemonId);
-  //   navigate(`/details?${nextParams.toString()}`);
-  // };
-
   const handlePokemonSelect = () => {};
-
-  // const handleCloseDetails = () => {
-  //   if (!detailsParam) {
-  //     return;
-  //   }
-  //   const nextParams = new URLSearchParams(searchParams);
-  //   nextParams.delete('details');
-  //   navigate(`/?${nextParams.toString()}`);
-  // };
 
   const handleCloseDetails = () => {};
 
@@ -121,11 +91,14 @@ export const MainPage = () => {
             )}
           </div>
         </main>
-        {/* <Outlet /> */}
       </div>
 
       <SelectionBar />
-      {/* <ErrorButton /> */}
     </div>
   );
 };
+
+// TODO:
+// - Restore ErrorButton
+// - Implement app/error.tsx
+// - Verify ErrorBoundary behavior in Next.js
