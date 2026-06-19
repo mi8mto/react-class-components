@@ -1,12 +1,5 @@
-import { getTranslations } from 'next-intl/server';
+import { MainPage } from '../../src/screens/MainPage/MainPage';
 
-export default async function HomePage() {
-  const t = await getTranslations('HomePage');
-
-  return (
-    <main>
-      <h1>{t('title')}</h1>
-      <p>{t('description')}</p>
-    </main>
-  );
+export default function HomePage() {
+  return <MainPage />;
 }
