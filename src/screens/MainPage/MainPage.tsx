@@ -1,6 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { PokemonDetailsPage } from '../PokemonDetailsPage/PokemonDetailsPage';
 import { Search } from '../../components/Search/Search';
 import { CardList } from '../../components/CardList/CardList';
 import { Pagination } from '../../components/Pagination/Pagination';
@@ -18,7 +19,7 @@ export const MainPage = () => {
   const searchParams = useSearchParams();
 
   const pageParam = searchParams.get('page');
-  // const detailsParam = searchParams.get('details');
+  const detailsParam = searchParams.get('details');
 
   const currentPage = pageParam ? Number(pageParam) : 1;
 
@@ -97,6 +98,7 @@ export const MainPage = () => {
             )}
           </div>
         </main>
+        {detailsParam && <PokemonDetailsPage />}
       </div>
 
       <SelectionBar />
