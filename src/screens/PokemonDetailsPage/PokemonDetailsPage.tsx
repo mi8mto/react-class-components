@@ -1,11 +1,13 @@
-import { useNavigate, useSearchParams } from 'react-router-dom';
+'use client';
+
+import { useRouter, useSearchParams } from 'next/navigation';
 import { Spinner } from '../../components/Spinner/Spinner';
 import { ErrorMessage } from '../../components/ErrorMessage/ErrorMessage';
 import { usePokemonDetailsQuery } from '../../hooks';
 
 export const PokemonDetailsPage = () => {
-  const [searchParams] = useSearchParams();
-  const navigate = useNavigate();
+  const searchParams = useSearchParams();
+  const router = useRouter();
 
   const detailsId = searchParams.get('details');
 
@@ -14,10 +16,13 @@ export const PokemonDetailsPage = () => {
     isLoading,
     error,
   } = usePokemonDetailsQuery(detailsId ?? '');
+
   const handleClose = () => {
-    const nextParams = new URLSearchParams(searchParams);
+    const nextParams = new URLSearchParams(searchParams.toString());
+
     nextParams.delete('details');
-    navigate(`/?${nextParams.toString()}`);
+
+    router.push(`?${nextParams.toString()}`);
   };
 
   return (

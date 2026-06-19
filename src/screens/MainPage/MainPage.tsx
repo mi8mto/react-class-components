@@ -53,7 +53,13 @@ export const MainPage = () => {
     setSearchTerm(search);
   };
 
-  const handlePokemonSelect = () => {};
+  const handlePokemonSelect = (pokemonId: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+
+    params.set('details', pokemonId);
+
+    router.push(`?${params.toString()}`);
+  };
 
   const handleCloseDetails = () => {};
 

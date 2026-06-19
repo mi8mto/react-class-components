@@ -1,5 +1,19 @@
 import { MainPage } from '../../src/screens/MainPage/MainPage';
+import { PokemonDetailsPage } from '../../src/screens/PokemonDetailsPage/PokemonDetailsPage';
 
-export default function HomePage() {
-  return <MainPage />;
+type Props = {
+  searchParams: Promise<{
+    details?: string;
+  }>;
+};
+
+export default async function HomePage({ searchParams }: Props) {
+  const params = await searchParams;
+
+  return (
+    <>
+      <MainPage />
+      {params.details && <PokemonDetailsPage />}
+    </>
+  );
 }
