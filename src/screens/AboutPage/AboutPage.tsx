@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 
 export const AboutPage = () => {
   return (
@@ -14,7 +14,7 @@ export const AboutPage = () => {
         RS School React Course
       </a>
       <br />
-      <Link to="/?page=1">Back to main page</Link>
+      <Link href="/?page=1">Back to main page</Link>
     </main>
   );
 };
