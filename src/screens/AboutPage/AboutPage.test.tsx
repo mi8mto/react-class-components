@@ -1,17 +1,12 @@
 import { render, screen } from '@testing-library/react';
-import { MemoryRouter } from 'react-router-dom';
 import { AboutPage } from './AboutPage';
 
 describe('AboutPage component', () => {
   test('renders author information and course link', () => {
-    render(
-      <MemoryRouter>
-        <AboutPage />
-      </MemoryRouter>
-    );
+    render(<AboutPage />);
 
     expect(screen.getByRole('heading', { name: /about/i })).toBeInTheDocument();
-    expect(screen.getByText(/author: ihar manakhau/i)).toBeInTheDocument();
+    expect(screen.getByText(/author: Ihar Manakhau/i)).toBeInTheDocument();
 
     const courseLink = screen.getByRole('link', {
       name: /rs school react course/i,

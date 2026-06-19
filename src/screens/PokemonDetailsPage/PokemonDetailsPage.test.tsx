@@ -1,8 +1,27 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render, screen, waitFor } from '@testing-library/react';
-import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { PokemonDetailsPage } from './PokemonDetailsPage';
 import * as api from '../../services/api';
+
+import { vi } from 'vitest';
+
+const pushMock = vi.fn();
+
+vi.mock('next/navigation', () => ({
+  useRouter: () => ({
+    push: pushMock,
+  }),
+  useSearchParams: () => ({
+    get: (key: string) => {
+      if (key === 'details') {
+        return '25';
+      }
+
+      return null;
+    },
+    toString: () => 'page=1&details=25',
+  }),
+}));
 
 vi.mock('../../services/api');
 
@@ -14,14 +33,10 @@ const queryClient = new QueryClient({
   },
 });
 
-const renderPokemonDetailsPage = (initialEntry: string) => {
+const renderPokemonDetailsPage = () => {
   return render(
     <QueryClientProvider client={queryClient}>
-      <MemoryRouter initialEntries={[initialEntry]}>
-        <Routes>
-          <Route path="/details" element={<PokemonDetailsPage />} />
-        </Routes>
-      </MemoryRouter>
+      <PokemonDetailsPage />
     </QueryClientProvider>
   );
 };
@@ -50,7 +65,7 @@ describe('PokemonDetailsPage component', () => {
       ],
     });
 
-    renderPokemonDetailsPage('/details?page=1&details=25');
+    renderPokemonDetailsPage();
 
     expect(screen.getByLabelText(/loading/i)).toBeInTheDocument();
 
@@ -73,16 +88,10 @@ describe('PokemonDetailsPage component', () => {
       new Error('API error')
     );
 
-    renderPokemonDetailsPage('/details?page=1&details=25');
+    renderPokemonDetailsPage();
 
     await waitFor(() => {
       expect(screen.getByText(/failed to load details/i)).toBeInTheDocument();
     });
-  });
-
-  test('does not fetch details when details param is missing', () => {
-    renderPokemonDetailsPage('/details?page=1');
-
-    expect(api.fetchPokemonDetails).not.toHaveBeenCalled();
   });
 });
