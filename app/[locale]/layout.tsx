@@ -1,24 +1,53 @@
+// app/ [locale] /layout.tsx
+// import { NextIntlClientProvider } from 'next-intl';
+// import { Providers } from '../../src/providers/providers';
+// import { getMessages } from 'next-intl/server';
+
+// export default async function LocaleLayout({
+//   children,
+//   params,
+// }: {
+//   children: React.ReactNode;
+//   params: Promise<{ locale: string }>;
+// }) {
+//   const { locale } = await params;
+
+//   const messages = await getMessages();
+
+//   return (
+//     <NextIntlClientProvider locale={locale} messages={messages}>
+//       <Providers>{children}</Providers>
+//     </NextIntlClientProvider>
+//   );
+// }
 import { NextIntlClientProvider } from 'next-intl';
-import { Providers } from '../../src/providers/providers';
 import { getMessages } from 'next-intl/server';
-import { Link } from '../../src/i18n/navigation';
+
+import { Providers } from '../../src/providers/providers';
+import { LanguageSwitcher } from '../../src/components/LanguageSwitcher/LanguageSwitcher';
 import { ThemeToggle } from '../../src/components/ThemeToggle/ThemeToggle';
+import { Link } from '../../src/i18n/navigation';
 
 export default async function LocaleLayout({
   children,
+  params,
 }: {
   children: React.ReactNode;
+  params: Promise<{ locale: string }>;
 }) {
+  const { locale } = await params;
+
   const messages = await getMessages();
 
   return (
-    <NextIntlClientProvider messages={messages}>
+    <NextIntlClientProvider locale={locale} messages={messages}>
       <Providers>
         <header className="app-header">
-          <nav className="app-nav" aria-label="Main navigation">
+          <nav className="app-nav">
             <Link href="/">Home</Link>
             <Link href="/about">About</Link>
 
+            <LanguageSwitcher />
             <ThemeToggle />
           </nav>
         </header>

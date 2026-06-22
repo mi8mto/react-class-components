@@ -1,4 +1,7 @@
+'use client';
+
 import { useRef } from 'react';
+import { useTranslations } from 'next-intl';
 import { useLocalStorage } from '../../hooks';
 
 const STORAGE_KEY = 'searchTerm';
@@ -8,17 +11,25 @@ interface SearchProps {
 }
 
 export const Search = ({ onSearch }: SearchProps) => {
+  const t = useTranslations('Search');
+
   const [searchTerm, setSearchTerm] = useLocalStorage(STORAGE_KEY);
-  const lastSearch = useRef(searchTerm);
+
+  const lastSearch = useRef('');
+
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
   };
 
   const handleSearch = () => {
     const trimmed = searchTerm.trim();
-    if (!trimmed || trimmed === lastSearch.current) return;
+
+    if (!trimmed) return;
+
+    if (trimmed === lastSearch.current) return;
 
     lastSearch.current = trimmed;
+
     setSearchTerm(trimmed);
     onSearch(trimmed);
   };
@@ -27,14 +38,14 @@ export const Search = ({ onSearch }: SearchProps) => {
     <div className="search-section">
       <input
         type="text"
-        placeholder="Search characters..."
+        placeholder={t('placeholder')}
         value={searchTerm}
         onChange={handleChange}
         className="search-input"
       />
 
       <button type="button" onClick={handleSearch} className="search-button">
-        Search
+        {t('button')}
       </button>
     </div>
   );

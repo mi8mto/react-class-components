@@ -1,6 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { PokemonDetailsPage } from '../PokemonDetailsPage/PokemonDetailsPage';
 import { ErrorButton } from '../../components/ErrorButton/ErrorButton';
 import { Search } from '../../components/Search/Search';
@@ -23,6 +24,9 @@ export const MainPage = () => {
   const detailsParam = searchParams.get('details');
 
   const currentPage = pageParam ? Number(pageParam) : 1;
+
+  const t = useTranslations('MainPage');
+  const e = useTranslations('Errors');
 
   const [searchTerm, setSearchTerm] = useState(() => {
     if (typeof window === 'undefined') {
@@ -77,7 +81,7 @@ export const MainPage = () => {
           <div className="results-section">
             {isLoading && <Spinner />}
 
-            {error && <ErrorMessage message="Failed to load data" />}
+            {error && <ErrorMessage message={e('failedToLoadData')} />}
 
             {!isLoading && !error && pokemonList.length > 0 && (
               <>
@@ -95,7 +99,7 @@ export const MainPage = () => {
             )}
 
             {!isLoading && !error && pokemonList.length === 0 && (
-              <p>No results found</p>
+              <p>{t('noResults')}</p>
             )}
           </div>
         </main>

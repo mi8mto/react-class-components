@@ -9,8 +9,10 @@ import { defineConfig, globalIgnores } from 'eslint/config';
 
 export default defineConfig([
   globalIgnores(['dist', '.next', '**/.next/**']),
+
   {
     files: ['**/*.{ts,tsx}'],
+
     extends: [
       js.configs.recommended,
       tseslint.configs.recommended,
@@ -20,6 +22,13 @@ export default defineConfig([
       reactPlugin.configs.flat['jsx-runtime'],
       eslintConfigPrettier,
     ],
+
+    settings: {
+      react: {
+        version: 'detect',
+      },
+    },
+
     languageOptions: {
       globals: globals.browser,
     },

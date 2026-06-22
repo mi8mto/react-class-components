@@ -3,8 +3,38 @@
     "home": "Home",
     "about": "About"
   },
-  "HomePage": {
-    "title": "Pokemon Search App",
-    "description": "Next.js migration in progress"
+  "Common": {
+    "theme": "Theme",
+    "light": "Light",
+    "dark": "Dark"
+  },
+  "Errors": {
+    "somethingWentWrong": "Something went wrong",
+    "tryAgain": "Try again",
+    "failedToLoadData": "Failed to load data",
+    "failedToLoadDetails": "Failed to load details",
+    "pageNotFound": "Page not found",
+    "backToMainPage": "Back to main page"
+  },
+  "AboutPage": {
+    "title": "About",
+    "author": "Author"
+  },
+  "MainPage": {
+    "noResults": "No results found"
+  },
+  "Search": {
+    "placeholder": "Search pokemon...",
+    "button": "Search"
+  },
+  "Buttons": {
+    "refresh": "Refresh data"
+  },
+  "PokemonDetails": {
+    "close": "Close details",
+    "height": "Height",
+    "weight": "Weight",
+    "baseExperience": "Base experience",
+    "types": "Types"
   }
 }
