@@ -13,7 +13,7 @@ export const ThemeProvider = ({ children }: ThemeProviderProps) => {
       return 'dark';
     }
 
-    return (localStorage.getItem('theme') as Theme) ?? 'dark';
+    return (localStorage.getItem('theme') as Theme | null) ?? 'dark';
   });
 
   useEffect(() => {

@@ -3,32 +3,31 @@ interface PokemonCsvItem {
   url: string;
 }
 
-export const downloadCsv = (pokemons: PokemonCsvItem[]) => {
-  const headers = ['Name', 'Pokemon URL'];
-
-  const rows = pokemons.map(({ name, url }) => [name, url]);
-
-  const csvContent = [
-    headers.join(','),
-    ...rows.map((row) => row.join(',')),
-  ].join('\n');
-
-  const blob = new Blob([csvContent], {
-    type: 'text/csv;charset=utf-8;',
+export const downloadCsv = async (
+  pokemons: PokemonCsvItem[]
+): Promise<void> => {
+  const response = await fetch('/api/export-csv', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(pokemons),
   });
 
-  const fileUrl = URL.createObjectURL(blob);
+  const blob = await response.blob();
+
+  const url = URL.createObjectURL(blob);
 
   const link = document.createElement('a');
 
-  link.href = fileUrl;
+  link.href = url;
   link.download = `${pokemons.length}_items.csv`;
 
-  document.body.append(link);
+  document.body.appendChild(link);
 
   link.click();
 
   link.remove();
 
-  URL.revokeObjectURL(fileUrl);
+  URL.revokeObjectURL(url);
 };

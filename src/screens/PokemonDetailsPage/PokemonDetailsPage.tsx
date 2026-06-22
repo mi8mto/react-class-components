@@ -58,6 +58,7 @@ export const PokemonDetailsPage = () => {
                 width={140}
                 height={140}
                 className="details-image"
+                priority
               />
             )}
 

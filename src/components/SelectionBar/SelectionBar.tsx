@@ -4,8 +4,8 @@ import { downloadCsv } from '../../utils/downloadCsv';
 export const SelectionBar = () => {
   const { selectedPokemons, clearSelectedPokemons } = usePokemonStore();
 
-  const handleDownload = () => {
-    downloadCsv(selectedPokemons);
+  const handleDownload = async () => {
+    await downloadCsv(selectedPokemons);
   };
 
   if (selectedPokemons.length === 0) {
