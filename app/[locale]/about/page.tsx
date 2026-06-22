@@ -1,11 +1,16 @@
-import { Link } from 'react-router-dom';
+import { getTranslations } from 'next-intl/server';
 
-export const AboutPage = () => {
+export default async function AboutPage() {
+  const t = await getTranslations('AboutPage');
+
   return (
     <main>
-      <h1>About</h1>
-      <p>Author: Ihar Manakhau</p>
+      <h1>{t('title')}</h1>
+
+      <p>{t('author')}: Ihar Manakhau</p>
+
       <p>This application was created as part of the RS School React course.</p>
+
       <a
         href="https://rs.school/courses/reactjs"
         target="_blank"
@@ -13,8 +18,6 @@ export const AboutPage = () => {
       >
         RS School React Course
       </a>
-      <br />
-      <Link to="/?page=1">Back to main page</Link>
     </main>
   );
-};
+}

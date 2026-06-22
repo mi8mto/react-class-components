@@ -1,12 +1,15 @@
-import { useEffect, useState } from 'react';
-import { Outlet, useNavigate, useSearchParams } from 'react-router-dom';
+'use client';
+import { useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useTranslations } from 'next-intl';
+import { PokemonDetailsPage } from '../PokemonDetailsPage/PokemonDetailsPage';
+import { ErrorButton } from '../../components/ErrorButton/ErrorButton';
 import { Search } from '../../components/Search/Search';
 import { CardList } from '../../components/CardList/CardList';
 import { Pagination } from '../../components/Pagination/Pagination';
 import { usePokemonQuery } from '../../hooks';
 import { Spinner } from '../../components/Spinner/Spinner';
 import { ErrorMessage } from '../../components/ErrorMessage/ErrorMessage';
-import { ErrorButton } from '../../components/ErrorButton/ErrorButton';
 import { SelectionBar } from '../../components/SelectionBar/SelectionBar';
 import { RefreshButton } from '../../components/RefreshButton/RefreshButton';
 
@@ -14,16 +17,24 @@ const SEARCH_STORAGE_KEY = 'searchTerm';
 const ITEMS_PER_PAGE = 4;
 
 export const MainPage = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const navigate = useNavigate();
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
   const pageParam = searchParams.get('page');
   const detailsParam = searchParams.get('details');
+
   const currentPage = pageParam ? Number(pageParam) : 1;
 
-  const [searchTerm, setSearchTerm] = useState(
-    () => localStorage.getItem(SEARCH_STORAGE_KEY) ?? ''
-  );
+  const t = useTranslations('MainPage');
+  const e = useTranslations('Errors');
+
+  const [searchTerm, setSearchTerm] = useState(() => {
+    if (typeof window === 'undefined') {
+      return '';
+    }
+
+    return localStorage.getItem(SEARCH_STORAGE_KEY) ?? '';
+  });
 
   const { data, isLoading, error } = usePokemonQuery(searchTerm, currentPage);
 
@@ -36,46 +47,27 @@ export const MainPage = () => {
     startIndex + ITEMS_PER_PAGE
   );
 
-  useEffect(() => {
-    if (!pageParam) {
-      setSearchParams({ page: '1' }, { replace: true });
-    }
-  }, [pageParam, setSearchParams]);
-
   const handlePageChange = (page: number) => {
-    const nextParams = new URLSearchParams(searchParams);
+    const params = new URLSearchParams(searchParams.toString());
 
-    nextParams.set('page', String(page));
-    nextParams.delete('details');
+    params.set('page', String(page));
 
-    navigate(`/?${nextParams.toString()}`);
+    router.push(`?${params.toString()}`);
   };
 
   const handleSearch = (search: string) => {
     setSearchTerm(search);
-    navigate('/?page=1');
   };
 
   const handlePokemonSelect = (pokemonId: string) => {
-    const nextParams = new URLSearchParams(searchParams);
+    const params = new URLSearchParams(searchParams.toString());
 
-    nextParams.set('page', String(currentPage));
-    nextParams.set('details', pokemonId);
+    params.set('details', pokemonId);
 
-    navigate(`/details?${nextParams.toString()}`);
+    router.push(`?${params.toString()}`);
   };
 
-  const handleCloseDetails = () => {
-    if (!detailsParam) {
-      return;
-    }
-
-    const nextParams = new URLSearchParams(searchParams);
-
-    nextParams.delete('details');
-
-    navigate(`/?${nextParams.toString()}`);
-  };
+  const handleCloseDetails = () => {};
 
   return (
     <div className="app-container">
@@ -89,7 +81,7 @@ export const MainPage = () => {
           <div className="results-section">
             {isLoading && <Spinner />}
 
-            {error && <ErrorMessage message="Failed to load data" />}
+            {error && <ErrorMessage message={e('failedToLoadData')} />}
 
             {!isLoading && !error && pokemonList.length > 0 && (
               <>
@@ -107,11 +99,11 @@ export const MainPage = () => {
             )}
 
             {!isLoading && !error && pokemonList.length === 0 && (
-              <p>No results found</p>
+              <p>{t('noResults')}</p>
             )}
           </div>
         </main>
-        <Outlet />
+        {detailsParam && <PokemonDetailsPage />}
       </div>
 
       <SelectionBar />

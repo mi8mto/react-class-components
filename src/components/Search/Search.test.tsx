@@ -1,5 +1,7 @@
 import { render, screen, fireEvent } from '@testing-library/react';
+import { vi } from 'vitest';
 import { Search } from './Search';
+import { TestProviders } from '../../test/TestProviders';
 
 describe('Search component', () => {
   beforeEach(() => {
@@ -7,22 +9,34 @@ describe('Search component', () => {
   });
 
   test('renders input and button', () => {
-    render(<Search onSearch={vi.fn()} />);
+    render(
+      <TestProviders>
+        <Search onSearch={vi.fn()} />
+      </TestProviders>
+    );
 
     expect(screen.getByRole('textbox')).toBeInTheDocument();
-    expect(screen.getByText('Search')).toBeInTheDocument();
+    expect(screen.getByRole('button')).toBeInTheDocument();
   });
 
   test('loads value from localStorage on mount', () => {
     localStorage.setItem('searchTerm', 'Luke');
 
-    render(<Search onSearch={vi.fn()} />);
+    render(
+      <TestProviders>
+        <Search onSearch={vi.fn()} />
+      </TestProviders>
+    );
 
     expect(screen.getByRole('textbox')).toHaveValue('Luke');
   });
 
   test('updates input value when typing', () => {
-    render(<Search onSearch={vi.fn()} />);
+    render(
+      <TestProviders>
+        <Search onSearch={vi.fn()} />
+      </TestProviders>
+    );
 
     const input = screen.getByRole('textbox');
 
@@ -34,12 +48,16 @@ describe('Search component', () => {
   test('calls onSearch with trimmed value', () => {
     const onSearch = vi.fn();
 
-    render(<Search onSearch={onSearch} />);
+    render(
+      <TestProviders>
+        <Search onSearch={onSearch} />
+      </TestProviders>
+    );
 
     const input = screen.getByRole('textbox');
 
     fireEvent.change(input, { target: { value: '  Vader  ' } });
-    fireEvent.click(screen.getByText('Search'));
+    fireEvent.click(screen.getByRole('button'));
 
     expect(onSearch).toHaveBeenCalledWith('Vader');
   });
@@ -47,12 +65,16 @@ describe('Search component', () => {
   test('saves trimmed value to localStorage', () => {
     const onSearch = vi.fn();
 
-    render(<Search onSearch={onSearch} />);
+    render(
+      <TestProviders>
+        <Search onSearch={onSearch} />
+      </TestProviders>
+    );
 
     const input = screen.getByRole('textbox');
 
     fireEvent.change(input, { target: { value: '  Leia  ' } });
-    fireEvent.click(screen.getByText('Search'));
+    fireEvent.click(screen.getByRole('button'));
 
     expect(localStorage.getItem('searchTerm')).toBe('Leia');
   });
@@ -60,9 +82,13 @@ describe('Search component', () => {
   test('does not call onSearch if input is empty', () => {
     const onSearch = vi.fn();
 
-    render(<Search onSearch={onSearch} />);
+    render(
+      <TestProviders>
+        <Search onSearch={onSearch} />
+      </TestProviders>
+    );
 
-    fireEvent.click(screen.getByText('Search'));
+    fireEvent.click(screen.getByRole('button'));
 
     expect(onSearch).not.toHaveBeenCalled();
   });
@@ -70,14 +96,18 @@ describe('Search component', () => {
   test('does not call onSearch if value did not change', () => {
     const onSearch = vi.fn();
 
-    render(<Search onSearch={onSearch} />);
+    render(
+      <TestProviders>
+        <Search onSearch={onSearch} />
+      </TestProviders>
+    );
 
     const input = screen.getByRole('textbox');
 
     fireEvent.change(input, { target: { value: 'Luke' } });
-    fireEvent.click(screen.getByText('Search'));
+    fireEvent.click(screen.getByRole('button'));
 
-    fireEvent.click(screen.getByText('Search'));
+    fireEvent.click(screen.getByRole('button'));
 
     expect(onSearch).toHaveBeenCalledTimes(1);
   });

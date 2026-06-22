@@ -1,11 +1,19 @@
-import { useNavigate, useSearchParams } from 'react-router-dom';
+'use client';
+
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useTranslations } from 'next-intl';
+import Image from 'next/image';
+
 import { Spinner } from '../../components/Spinner/Spinner';
 import { ErrorMessage } from '../../components/ErrorMessage/ErrorMessage';
 import { usePokemonDetailsQuery } from '../../hooks';
 
 export const PokemonDetailsPage = () => {
-  const [searchParams] = useSearchParams();
-  const navigate = useNavigate();
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
+  const t = useTranslations('PokemonDetails');
+  const e = useTranslations('Errors');
 
   const detailsId = searchParams.get('details');
 
@@ -14,10 +22,13 @@ export const PokemonDetailsPage = () => {
     isLoading,
     error,
   } = usePokemonDetailsQuery(detailsId ?? '');
+
   const handleClose = () => {
-    const nextParams = new URLSearchParams(searchParams);
+    const nextParams = new URLSearchParams(searchParams.toString());
+
     nextParams.delete('details');
-    navigate(`/?${nextParams.toString()}`);
+
+    router.push(`?${nextParams.toString()}`);
   };
 
   return (
@@ -27,24 +38,27 @@ export const PokemonDetailsPage = () => {
           type="button"
           className="details-close-button"
           onClick={handleClose}
-          aria-label="Close details"
+          aria-label={t('close')}
         >
           ×
         </button>
 
         {isLoading && <Spinner />}
 
-        {error && <ErrorMessage message="Failed to load details" />}
+        {error && <ErrorMessage message={e('failedToLoadDetails')} />}
 
         {!isLoading && !error && pokemonDetails && (
           <div className="details-content">
             <h2>{pokemonDetails.name}</h2>
 
             {pokemonDetails.sprites.front_default && (
-              <img
+              <Image
                 src={pokemonDetails.sprites.front_default}
                 alt={pokemonDetails.name}
+                width={140}
+                height={140}
                 className="details-image"
+                priority
               />
             )}
 
@@ -55,22 +69,22 @@ export const PokemonDetailsPage = () => {
               </div>
 
               <div>
-                <dt>Height</dt>
+                <dt>{t('height')}</dt>
                 <dd>{pokemonDetails.height}</dd>
               </div>
 
               <div>
-                <dt>Weight</dt>
+                <dt>{t('weight')}</dt>
                 <dd>{pokemonDetails.weight}</dd>
               </div>
 
               <div>
-                <dt>Base experience</dt>
+                <dt>{t('baseExperience')}</dt>
                 <dd>{pokemonDetails.base_experience}</dd>
               </div>
 
               <div>
-                <dt>Types</dt>
+                <dt>{t('types')}</dt>
                 <dd>
                   {pokemonDetails.types.map(({ type }) => type.name).join(', ')}
                 </dd>

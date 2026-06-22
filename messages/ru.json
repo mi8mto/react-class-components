@@ -1,0 +1,40 @@
+{
+  "Navigation": {
+    "home": "Главная",
+    "about": "О проекте"
+  },
+  "Common": {
+    "theme": "Тема",
+    "light": "Светлая",
+    "dark": "Тёмная"
+  },
+  "Errors": {
+    "somethingWentWrong": "Что-то пошло не так",
+    "tryAgain": "Повторить",
+    "failedToLoadData": "Не удалось загрузить данные",
+    "failedToLoadDetails": "Не удалось загрузить детали",
+    "pageNotFound": "Страница не найдена",
+    "backToMainPage": "Вернуться на главную"
+  },
+  "AboutPage": {
+    "title": "О проекте",
+    "author": "Автор"
+  },
+  "MainPage": {
+    "noResults": "Ничего не найдено"
+  },
+  "Search": {
+    "placeholder": "Поиск покемонов...",
+    "button": "Найти"
+  },
+  "Buttons": {
+    "refresh": "Обновить данные"
+  },
+  "PokemonDetails": {
+    "close": "Закрыть детали",
+    "height": "Рост",
+    "weight": "Вес",
+    "baseExperience": "Базовый опыт",
+    "types": "Типы"
+  }
+}

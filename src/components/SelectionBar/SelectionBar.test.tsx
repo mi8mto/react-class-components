@@ -48,16 +48,18 @@ describe('SelectionBar component', () => {
     expect(usePokemonStore.getState().selectedPokemons).toHaveLength(0);
   });
 
-  test('downloads selected pokemons as csv', () => {
+  test('downloads selected pokemons as csv', async () => {
     usePokemonStore.getState().selectPokemon({
       id: '25',
       name: 'pikachu',
       url: 'https://pokeapi.co/api/v2/pokemon/25/',
     });
 
-    const createObjectURLMock = vi.fn();
+    const fetchMock = vi.fn().mockResolvedValue({
+      blob: () => Promise.resolve(new Blob(['csv'])),
+    });
 
-    URL.createObjectURL = createObjectURLMock;
+    global.fetch = fetchMock as typeof fetch;
 
     render(<SelectionBar />);
 
@@ -67,6 +69,13 @@ describe('SelectionBar component', () => {
       })
     );
 
-    expect(createObjectURLMock).toHaveBeenCalled();
+    await vi.waitFor(() => {
+      expect(fetchMock).toHaveBeenCalledWith(
+        '/api/export-csv',
+        expect.objectContaining({
+          method: 'POST',
+        })
+      );
+    });
   });
 });
